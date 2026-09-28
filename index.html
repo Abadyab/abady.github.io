@@ -1,459 +1,317 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>محول العملات الذكي - تحويل فوري وسريع</title>
-    <meta name="description" content="أداة تحويل العملات الذكية من عبدالباري. حوّل بين أكثر من 40 عملة بأسعار حقيقية من API.">
-    <meta name="keywords" content="تحويل العملات, محول عملات, أسعار الصرف, Currency Converter">
-    <meta name="author" content="عبدالباري">
-    <link rel="canonical" href="https://your-username.github.io/">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2a7de1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💱</text></svg>">
-    <style>
-        :root {
-            --bg-body: linear-gradient(145deg, #f6f9fc 0%, #e6f0f5 100%);
-            --bg-container: rgba(255,255,255,0.92);
-            --border-container: rgba(255,255,255,0.4);
-            --text-primary: #0b2a45;
-            --text-secondary: #4a6a8a;
-            --text-light: #5a7a9a;
-            --bg-input: white;
-            --border-input: #dce7f2;
-            --bg-result: linear-gradient(135deg, #e8f2ff, #d6e8ff);
-            --border-result: rgba(42,125,225,0.2);
-            --bg-history: #f8fcff;
-            --border-history: #e0ecf8;
-            --bg-ad: #f2f7fd;
-            --border-ad: #b8d0e8;
-            --shadow: 0 20px 60px rgba(0,20,40,0.15);
-            --btn-primary: #2a7de1;
-            --btn-primary-hover: #1a5db1;
-            --btn-primary-shadow: rgba(42,125,225,0.3);
-            --text-result: #0a2a5a;
-            --text-result-small: #4a7aaa;
-            --bg-status: #e8f0fe;
-            --text-status: #1a5a3a;
-            --bg-toggle: #e8f0fe;
-            --text-toggle: #1a3a5a;
-            --shadow-toggle: rgba(0,0,0,0.08);
-            --bg-select: white;
-            --border-select: #dce7f2;
-            --bg-select-hover: #f0f5ff;
-            --bg-dropdown: white;
-            --shadow-dropdown: 0 8px 30px rgba(0,0,0,0.15);
-            --bg-page: white;
-            --text-page: #1a3a5a;
-            --border-page: #dce7f2;
-        }
-        body.dark-mode {
-            --bg-body: linear-gradient(145deg, #0f1a2a 0%, #1a2a3f 100%);
-            --bg-container: rgba(25,40,60,0.92);
-            --border-container: rgba(255,255,255,0.08);
-            --text-primary: #e8f0f8;
-            --text-secondary: #8aaac8;
-            --text-light: #6a8aaa;
-            --bg-input: #1a2a3f;
-            --border-input: #2a4a6a;
-            --bg-result: linear-gradient(135deg, #1a2a4a, #0f1a3a);
-            --border-result: rgba(42,125,225,0.3);
-            --bg-history: #1a2a3f;
-            --border-history: #2a4a6a;
-            --bg-ad: #1a2a3f;
-            --border-ad: #2a4a6a;
-            --shadow: 0 20px 60px rgba(0,0,0,0.5);
-            --btn-primary: #3a8df1;
-            --btn-primary-hover: #5aa5ff;
-            --btn-primary-shadow: rgba(42,125,225,0.5);
-            --text-result: #d6e8ff;
-            --text-result-small: #8ab0e0;
-            --bg-status: #1a2a3f;
-            --text-status: #7accaa;
-            --bg-toggle: #1a2a4a;
-            --text-toggle: #e8f0f8;
-            --shadow-toggle: rgba(0,0,0,0.3);
-            --bg-select: #1a2a3f;
-            --border-select: #2a4a6a;
-            --bg-select-hover: #1a2a4a;
-            --bg-dropdown: #1a2a3f;
-            --shadow-dropdown: 0 8px 30px rgba(0,0,0,0.5);
-            --bg-page: #1a2a3f;
-            --text-page: #d6e8ff;
-            --border-page: #2a4a6a;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; transition: background 0.4s ease, color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-body); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 15px; }
-        .container { background: var(--bg-container); backdrop-filter: blur(12px); max-width: 500px; width: 100%; padding: 28px 20px 32px; border-radius: 32px; box-shadow: var(--shadow); border: 1px solid var(--border-container); animation: fadeIn 0.6s ease; margin: 10px 0; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; flex-wrap: wrap; gap: 8px; }
-        .header-left { display: flex; align-items: center; gap: 10px; }
-        h1 { font-size: 24px; color: var(--text-primary); font-weight: 800; }
-        .badge { background: var(--btn-primary); color: white; padding: 4px 14px; border-radius: 40px; font-size: 12px; font-weight: 600; }
-        .api-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-status); background: var(--bg-status); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-input); }
-        .api-status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
-        .api-status .dot.online { background: #22c55e; }
-        .api-status .dot.offline { background: #ef4444; animation: none; }
-        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-        .top-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 12px; justify-content: space-between; align-items: center; }
-        .language-selector { position: relative; display: inline-block; }
-        .language-selector .selected-lang { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-select); border: 2px solid var(--border-select); border-radius: 30px; cursor: pointer; transition: 0.3s; font-size: 14px; font-weight: 600; color: var(--text-primary); min-width: 120px; }
-        .language-selector .selected-lang:hover { border-color: var(--btn-primary); box-shadow: 0 0 0 4px var(--btn-primary-shadow); }
-        .language-selector .selected-lang .arrow { margin-left: auto; font-size: 12px; transition: 0.3s; color: var(--text-light); }
-        .language-selector .selected-lang .arrow.open { transform: rotate(180deg); }
-        .language-selector .dropdown { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: var(--bg-dropdown); border: 2px solid var(--border-select); border-radius: 16px; box-shadow: var(--shadow-dropdown); padding: 6px; z-index: 100; display: none; max-height: 220px; overflow-y: auto; }
-        .language-selector .dropdown.open { display: block; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-        .language-selector .dropdown .lang-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 14px; color: var(--text-primary); }
-        .language-selector .dropdown .lang-option:hover { background: var(--bg-select-hover); }
-        .language-selector .dropdown .lang-option.active { background: var(--btn-primary); color: white; }
-        .language-selector .dropdown .lang-option .flag { font-size: 20px; }
-        .language-selector .dropdown .lang-option .lang-name { font-weight: 500; }
-        .language-selector .dropdown .lang-option .lang-code { font-size: 11px; color: var(--text-light); margin-left: auto; }
-        .language-selector .dropdown .lang-option.active .lang-code { color: rgba(255,255,255,0.7); }
-        .dark-toggle-wrapper { display: flex; align-items: center; gap: 6px; }
-        .dark-toggle-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-        .dark-toggle { position: relative; width: 52px; height: 28px; background: var(--bg-toggle); border: 2px solid var(--border-ad); border-radius: 40px; cursor: pointer; transition: 0.4s; box-shadow: 0 2px 8px var(--shadow-toggle); flex-shrink: 0; }
-        .dark-toggle:hover { transform: scale(1.05); }
-        .dark-toggle .toggle-slider { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: var(--btn-primary); border-radius: 50%; transition: 0.4s; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-        .dark-toggle.active .toggle-slider { left: 27px; background: #fbbf24; }
-        .dark-toggle .toggle-icon { position: absolute; top: 50%; transform: translateY(-50%); font-size: 12px; pointer-events: none; transition: 0.3s; }
-        .dark-toggle .toggle-icon.sun { left: 6px; opacity:1; }
-        .dark-toggle .toggle-icon.moon { right: 6px; opacity:0.3; }
-        .dark-toggle.active .toggle-icon.sun { opacity:0.3; }
-        .dark-toggle.active .toggle-icon.moon { opacity:1; }
-        .sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; border-right: 4px solid var(--btn-primary); padding-right: 12px; min-height: 20px; }
-        .ad-top, .ad-bottom { background: var(--bg-ad); border: 2px dashed var(--border-ad); border-radius: 16px; padding: 16px 10px; text-align: center; font-size: 12px; color: var(--text-light); transition: 0.3s; }
-        .ad-top { margin-bottom: 20px; }
-        .ad-bottom { margin-top: 20px; }
-        label { display: block; text-align: right; font-weight: 700; font-size: 14px; color: var(--text-secondary); margin: 14px 0 6px; }
-        .input-group { position: relative; }
-        .input-group input { width: 100%; padding: 14px 18px; border: 2px solid var(--border-input); border-radius: 16px; font-size: 18px; background: var(--bg-input); color: var(--text-primary); transition: 0.3s; direction: ltr; text-align: right; }
-        .input-group input:focus { border-color: var(--btn-primary); box-shadow: 0 0 0 4px var(--btn-primary-shadow); outline: none; }
-        .currency-select-wrapper { position: relative; }
-        .currency-select-wrapper select { width: 100%; padding: 14px 18px; border: 2px solid var(--border-input); border-radius: 16px; font-size: 16px; background: var(--bg-input); color: var(--text-primary); transition: 0.3s; direction: ltr; text-align: right; appearance: none; -webkit-appearance: none; cursor: pointer; max-height: 200px; overflow-y: auto; }
-        .currency-select-wrapper select:focus { border-color: var(--btn-primary); box-shadow: 0 0 0 4px var(--btn-primary-shadow); outline: none; }
-        .currency-select-wrapper select option { padding: 8px 12px; font-size: 15px; }
-        .currency-select-wrapper .select-arrow { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--text-light); pointer-events: none; }
-        .swap-btn { background: var(--btn-primary); color: white; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 22px; margin: 8px auto 4px; cursor: pointer; transition: 0.4s; box-shadow: 0 4px 12px var(--btn-primary-shadow); display: flex; align-items: center; justify-content: center; }
-        .swap-btn:hover { transform: rotate(180deg) scale(1.05); background: var(--btn-primary-hover); }
-        .swap-btn:active { transform: scale(0.92); }
-        .result-box { margin-top: 18px; background: var(--bg-result); border-radius: 20px; padding: 22px 18px; text-align: center; border: 1px solid var(--border-result); transition: 0.4s; }
-        .result-box .label { font-size: 13px; color: var(--text-result-small); font-weight: 600; }
-        .result-box .value { font-size: 34px; font-weight: 800; color: var(--text-result); margin-top: 4px; letter-spacing: -0.5px; transition: 0.2s; }
-        .result-box .value small { font-size: 18px; font-weight: 600; color: var(--text-result-small); }
-        .result-box .updated-at { font-size: 11px; color: var(--text-light); margin-top: 6px; }
-        .history-box { margin-top: 14px; background: var(--bg-history); border-radius: 14px; padding: 12px 16px; border: 1px solid var(--border-history); display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); flex-wrap: wrap; gap: 4px; }
-        .history-box span:first-child { font-weight: 600; }
-        .page-content { display: none; margin-top: 20px; padding: 20px 18px; background: var(--bg-page); border-radius: 20px; border: 1px solid var(--border-page); color: var(--text-page); text-align: right; animation: fadeIn 0.5s ease; }
-        .page-content.active { display: block; }
-        .page-content h2 { font-size: 22px; margin-bottom: 16px; color: var(--text-primary); }
-        .page-content h3 { font-size: 17px; margin: 18px 0 10px; color: var(--text-secondary); }
-        .page-content p { font-size: 15px; line-height: 1.8; margin-bottom: 12px; color: var(--text-secondary); }
-        .page-content ul { padding-right: 20px; margin-bottom: 12px; }
-        .page-content ul li { font-size: 15px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 6px; }
-        .page-content .highlight { background: var(--bg-result); padding: 2px 10px; border-radius: 8px; font-weight: 600; color: var(--btn-primary); }
-        .page-content .back-btn { background: var(--bg-ad); border: 2px solid var(--border-ad); border-radius: 30px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-secondary); transition: 0.3s; margin-top: 16px; }
-        .page-content .back-btn:hover { background: var(--btn-primary); color: white; border-color: var(--btn-primary); }
-        .page-content .contact-form input, .page-content .contact-form textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--border-input); border-radius: 14px; font-size: 15px; background: var(--bg-input); color: var(--text-primary); transition: 0.3s; margin-bottom: 12px; font-family: inherit; }
-        .page-content .contact-form input:focus, .page-content .contact-form textarea:focus { border-color: var(--btn-primary); box-shadow: 0 0 0 4px var(--btn-primary-shadow); outline: none; }
-        .page-content .contact-form textarea { min-height: 120px; resize: vertical; }
-        .page-content .contact-form button { background: var(--btn-primary); color: white; border: none; border-radius: 30px; padding: 12px 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; }
-        .page-content .contact-form button:hover { background: var(--btn-primary-hover); transform: scale(1.02); }
-        .page-content .developer-info { background: var(--bg-result); border-radius: 12px; padding: 12px 16px; margin: 12px 0; border-right: 4px solid var(--btn-primary); }
-        .page-content .developer-info strong { color: var(--btn-primary); }
-        .footer { margin-top: 20px; font-size: 12px; color: var(--text-light); text-align: center; border-top: 1px solid var(--border-history); padding-top: 16px; }
-        .footer .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 10px; }
-        .footer .footer-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: 0.3s; cursor: pointer; font-size: 13px; }
-        .footer .footer-links a:hover { color: var(--btn-primary); }
-        .footer .install-btn { background: var(--btn-primary); color: white; border: none; border-radius: 30px; padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: 0.3s; }
-        .footer .install-btn:hover { background: var(--btn-primary-hover); transform: scale(1.02); }
-        .footer .copyright { margin-top: 10px; font-size: 11px; color: var(--text-light); }
-        .footer .developer-credit { font-size: 12px; color: var(--text-light); margin-top: 4px; }
-        .footer .developer-credit strong { color: var(--btn-primary); }
-        @media (max-width:420px) { .container { padding:16px 12px 20px; } h1 { font-size:20px; } .result-box .value { font-size:26px; } .dark-toggle { width:46px; height:24px; } .dark-toggle .toggle-slider { width:16px; height:16px; top:2px; left:2px; } .dark-toggle.active .toggle-slider { left:24px; } .dark-toggle .toggle-icon { font-size:10px; } .top-controls { gap:6px; } .api-status { font-size:10px; padding:3px 10px; } .dark-toggle-label { font-size:10px; } .language-selector .selected-lang { padding:6px 12px; font-size:13px; min-width:100px; } .language-selector .dropdown .lang-option { padding:8px 12px; font-size:13px; } .page-content { padding:16px 14px; } .page-content h2 { font-size:19px; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>محول العملات الذكي - تحويل فوري وأسعار حقيقية</title>
+<meta name="description" content="أداة تحويل العملات الذكية من عبدالباري. حوّل بين أكثر من 40 عملة بأسعار حقيقية من API، مع مقالات تعليمية عن العملات وأسعار الصرف.">
+<meta name="keywords" content="تحويل العملات, محول عملات, أسعار الصرف, تحويل دولار لريال, Currency Converter">
+<meta name="author" content="عبدالباري">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2a7de1">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💱</text></svg>">
+<style>
+:root{--bg-body:linear-gradient(145deg,#f6f9fc 0%,#e6f0f5 100%);--bg-container:rgba(255,255,255,0.92);--border-container:rgba(255,255,255,0.4);--text-primary:#0b2a45;--text-secondary:#4a6a8a;--text-light:#5a7a9a;--bg-input:#fff;--border-input:#dce7f2;--bg-result:linear-gradient(135deg,#e8f2ff,#d6e8ff);--border-result:rgba(42,125,225,0.2);--bg-history:#f8fcff;--border-history:#e0ecf8;--bg-ad:#f2f7fd;--border-ad:#b8d0e8;--shadow:0 20px 60px rgba(0,20,40,0.15);--btn-primary:#2a7de1;--btn-primary-hover:#1a5db1;--btn-primary-shadow:rgba(42,125,225,0.3);--text-result:#0a2a5a;--text-result-small:#4a7aaa;--bg-status:#e8f0fe;--text-status:#1a5a3a;--bg-toggle:#e8f0fe;--text-toggle:#1a3a5a;--shadow-toggle:rgba(0,0,0,0.08);--bg-select:#fff;--border-select:#dce7f2;--bg-select-hover:#f0f5ff;--bg-dropdown:#fff;--shadow-dropdown:0 8px 30px rgba(0,0,0,0.15);--bg-page:#fff;--text-page:#1a3a5a;--border-page:#dce7f2}
+body.dark-mode{--bg-body:linear-gradient(145deg,#0f1a2a 0%,#1a2a3f 100%);--bg-container:rgba(25,40,60,0.92);--border-container:rgba(255,255,255,0.08);--text-primary:#e8f0f8;--text-secondary:#8aaac8;--text-light:#6a8aaa;--bg-input:#1a2a3f;--border-input:#2a4a6a;--bg-result:linear-gradient(135deg,#1a2a4a,#0f1a3a);--border-result:rgba(42,125,225,0.3);--bg-history:#1a2a3f;--border-history:#2a4a6a;--bg-ad:#1a2a3f;--border-ad:#2a4a6a;--shadow:0 20px 60px rgba(0,0,0,0.5);--btn-primary:#3a8df1;--btn-primary-hover:#5aa5ff;--btn-primary-shadow:rgba(42,125,225,0.5);--text-result:#d6e8ff;--text-result-small:#8ab0e0;--bg-status:#1a2a3f;--text-status:#7accaa;--bg-toggle:#1a2a4a;--text-toggle:#e8f0f8;--shadow-toggle:rgba(0,0,0,0.3);--bg-select:#1a2a3f;--border-select:#2a4a6a;--bg-select-hover:#1a2a4a;--bg-dropdown:#1a2a3f;--shadow-dropdown:0 8px 30px rgba(0,0,0,0.5);--bg-page:#1a2a3f;--text-page:#d6e8ff;--border-page:#2a4a6a}
+*{margin:0;padding:0;box-sizing:border-box;transition:background 0.4s ease,color 0.3s ease,border 0.3s ease,box-shadow 0.3s ease,transform 0.3s ease}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg-body);min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:15px}
+.container{background:var(--bg-container);backdrop-filter:blur(12px);max-width:600px;width:100%;padding:28px 20px 32px;border-radius:32px;box-shadow:var(--shadow);border:1px solid var(--border-container);animation:fadeIn 0.6s ease;margin:10px 0}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;flex-wrap:wrap;gap:8px}
+.header-left{display:flex;align-items:center;gap:10px}
+h1{font-size:24px;color:var(--text-primary);font-weight:800}
+.badge{background:var(--btn-primary);color:#fff;padding:4px 14px;border-radius:40px;font-size:12px;font-weight:600}
+.api-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-status);background:var(--bg-status);padding:4px 12px;border-radius:20px;border:1px solid var(--border-input)}
+.api-status .dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite}
+.api-status .dot.online{background:#22c55e}
+.api-status .dot.offline{background:#ef4444;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.top-controls{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 12px;justify-content:space-between;align-items:center}
+.language-selector{position:relative;display:inline-block}
+.language-selector .selected-lang{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--bg-select);border:2px solid var(--border-select);border-radius:30px;cursor:pointer;transition:0.3s;font-size:14px;font-weight:600;color:var(--text-primary);min-width:120px}
+.language-selector .selected-lang:hover{border-color:var(--btn-primary);box-shadow:0 0 0 4px var(--btn-primary-shadow)}
+.language-selector .selected-lang .arrow{margin-left:auto;font-size:12px;transition:0.3s;color:var(--text-light)}
+.language-selector .selected-lang .arrow.open{transform:rotate(180deg)}
+.language-selector .dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg-dropdown);border:2px solid var(--border-select);border-radius:16px;box-shadow:var(--shadow-dropdown);padding:6px;z-index:100;display:none;max-height:220px;overflow-y:auto}
+.language-selector .dropdown.open{display:block;animation:slideDown 0.3s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.language-selector .dropdown .lang-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;cursor:pointer;transition:0.2s;font-size:14px;color:var(--text-primary)}
+.language-selector .dropdown .lang-option:hover{background:var(--bg-select-hover)}
+.language-selector .dropdown .lang-option.active{background:var(--btn-primary);color:#fff}
+.language-selector .dropdown .lang-option .flag{font-size:20px}
+.language-selector .dropdown .lang-option .lang-name{font-weight:500}
+.language-selector .dropdown .lang-option .lang-code{font-size:11px;color:var(--text-light);margin-left:auto}
+.language-selector .dropdown .lang-option.active .lang-code{color:rgba(255,255,255,0.7)}
+.dark-toggle-wrapper{display:flex;align-items:center;gap:6px}
+.dark-toggle-label{font-size:12px;color:var(--text-secondary);font-weight:600}
+.dark-toggle{position:relative;width:52px;height:28px;background:var(--bg-toggle);border:2px solid var(--border-ad);border-radius:40px;cursor:pointer;transition:0.4s;box-shadow:0 2px 8px var(--shadow-toggle);flex-shrink:0}
+.dark-toggle:hover{transform:scale(1.05)}
+.dark-toggle .toggle-slider{position:absolute;top:3px;left:3px;width:18px;height:18px;background:var(--btn-primary);border-radius:50%;transition:0.4s;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+.dark-toggle.active .toggle-slider{left:27px;background:#fbbf24}
+.dark-toggle .toggle-icon{position:absolute;top:50%;transform:translateY(-50%);font-size:12px;pointer-events:none;transition:0.3s}
+.dark-toggle .toggle-icon.sun{left:6px;opacity:1}
+.dark-toggle .toggle-icon.moon{right:6px;opacity:0.3}
+.dark-toggle.active .toggle-icon.sun{opacity:0.3}
+.dark-toggle.active .toggle-icon.moon{opacity:1}
+.sub{color:var(--text-secondary);font-size:13px;margin-bottom:20px;border-right:4px solid var(--btn-primary);padding-right:12px;min-height:20px}
+.ad-top,.ad-bottom{background:var(--bg-ad);border:2px dashed var(--border-ad);border-radius:16px;padding:16px 10px;text-align:center;font-size:12px;color:var(--text-light);transition:0.3s}
+.ad-top{margin-bottom:20px}
+.ad-bottom{margin-top:20px}
+label{display:block;text-align:right;font-weight:700;font-size:14px;color:var(--text-secondary);margin:14px 0 6px}
+.input-group{position:relative}
+.input-group input{width:100%;padding:14px 18px;border:2px solid var(--border-input);border-radius:16px;font-size:18px;background:var(--bg-input);color:var(--text-primary);transition:0.3s;direction:ltr;text-align:right}
+.input-group input:focus{border-color:var(--btn-primary);box-shadow:0 0 0 4px var(--btn-primary-shadow);outline:none}
+.currency-select-wrapper{position:relative}
+.currency-select-wrapper select{width:100%;padding:14px 18px;border:2px solid var(--border-input);border-radius:16px;font-size:16px;background:var(--bg-input);color:var(--text-primary);transition:0.3s;direction:ltr;text-align:right;appearance:none;-webkit-appearance:none;cursor:pointer;max-height:200px;overflow-y:auto}
+.currency-select-wrapper select:focus{border-color:var(--btn-primary);box-shadow:0 0 0 4px var(--btn-primary-shadow);outline:none}
+.currency-select-wrapper select option{padding:8px 12px;font-size:15px}
+.currency-select-wrapper .select-arrow{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text-light);pointer-events:none}
+.swap-btn{background:var(--btn-primary);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:22px;margin:8px auto 4px;cursor:pointer;transition:0.4s;box-shadow:0 4px 12px var(--btn-primary-shadow);display:flex;align-items:center;justify-content:center}
+.swap-btn:hover{transform:rotate(180deg) scale(1.05);background:var(--btn-primary-hover)}
+.swap-btn:active{transform:scale(0.92)}
+.result-box{margin-top:18px;background:var(--bg-result);border-radius:20px;padding:22px 18px;text-align:center;border:1px solid var(--border-result);transition:0.4s}
+.result-box .label{font-size:13px;color:var(--text-result-small);font-weight:600}
+.result-box .value{font-size:34px;font-weight:800;color:var(--text-result);margin-top:4px;letter-spacing:-0.5px;transition:0.2s}
+.result-box .value small{font-size:18px;font-weight:600;color:var(--text-result-small)}
+.result-box .updated-at{font-size:11px;color:var(--text-light);margin-top:6px}
+.history-box{margin-top:14px;background:var(--bg-history);border-radius:14px;padding:12px 16px;border:1px solid var(--border-history);display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);flex-wrap:wrap;gap:4px}
+.history-box span:first-child{font-weight:600}
+.page-content{display:none;margin-top:20px;padding:20px 18px;background:var(--bg-page);border-radius:20px;border:1px solid var(--border-page);color:var(--text-page);text-align:right;animation:fadeIn 0.5s ease}
+.page-content.active{display:block}
+.page-content h2{font-size:22px;margin-bottom:16px;color:var(--text-primary)}
+.page-content h3{font-size:17px;margin:18px 0 10px;color:var(--text-secondary)}
+.page-content p{font-size:15px;line-height:1.8;margin-bottom:12px;color:var(--text-secondary)}
+.page-content ul{padding-right:20px;margin-bottom:12px}
+.page-content ul li{font-size:15px;line-height:1.8;color:var(--text-secondary);margin-bottom:6px}
+.page-content .developer-info{background:var(--bg-result);border-radius:12px;padding:12px 16px;margin:12px 0;border-right:4px solid var(--btn-primary)}
+.page-content .developer-info strong{color:var(--btn-primary)}
+.page-content .back-btn{background:var(--bg-ad);border:2px solid var(--border-ad);border-radius:30px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-secondary);transition:0.3s;margin-top:16px}
+.page-content .back-btn:hover{background:var(--btn-primary);color:#fff;border-color:var(--btn-primary)}
+.page-content .contact-form input,.page-content .contact-form textarea{width:100%;padding:12px 16px;border:2px solid var(--border-input);border-radius:14px;font-size:15px;background:var(--bg-input);color:var(--text-primary);transition:0.3s;margin-bottom:12px;font-family:inherit}
+.page-content .contact-form input:focus,.page-content .contact-form textarea:focus{border-color:var(--btn-primary);box-shadow:0 0 0 4px var(--btn-primary-shadow);outline:none}
+.page-content .contact-form textarea{min-height:120px;resize:vertical}
+.page-content .contact-form button{background:var(--btn-primary);color:#fff;border:none;border-radius:30px;padding:12px 30px;font-size:16px;font-weight:600;cursor:pointer;transition:0.3s;width:100%}
+.page-content .contact-form button:hover{background:var(--btn-primary-hover);transform:scale(1.02)}
+.articles-section{margin-top:30px}
+.articles-section h2{font-size:22px;color:var(--text-primary);margin-bottom:16px;text-align:center}
+.article-card{background:var(--bg-page);border:1px solid var(--border-page);border-radius:16px;padding:18px;margin-bottom:14px;cursor:pointer;transition:0.3s;text-align:right}
+.article-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(42,125,225,0.15);border-color:var(--btn-primary)}
+.article-card h3{font-size:16px;color:var(--text-primary);margin-bottom:8px}
+.article-card p{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.article-card .read-more{font-size:12px;color:var(--btn-primary);font-weight:600;margin-top:8px}
+.article-full h2{font-size:20px;color:var(--text-primary);margin-bottom:14px}
+.article-full h3{font-size:16px;color:var(--text-secondary);margin:16px 0 8px}
+.article-full p{font-size:15px;line-height:1.9;color:var(--text-secondary);margin-bottom:12px;text-align:justify}
+.article-full ul{padding-right:20px;margin-bottom:12px}
+.article-full ul li{font-size:15px;line-height:1.9;color:var(--text-secondary);margin-bottom:6px}
+.footer{margin-top:20px;font-size:12px;color:var(--text-light);text-align:center;border-top:1px solid var(--border-history);padding-top:16px}
+.footer .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:10px}
+.footer .footer-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:0.3s;cursor:pointer;font-size:13px}
+.footer .footer-links a:hover{color:var(--btn-primary)}
+.footer .install-btn{background:var(--btn-primary);color:#fff;border:none;border-radius:30px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:0.3s}
+.footer .install-btn:hover{background:var(--btn-primary-hover);transform:scale(1.02)}
+.footer .copyright{margin-top:10px;font-size:11px;color:var(--text-light)}
+.footer .developer-credit{font-size:12px;color:var(--text-light);margin-top:4px}
+.footer .developer-credit strong{color:var(--btn-primary)}
+@media (max-width:420px){.container{padding:16px 12px 20px}h1{font-size:20px}.result-box .value{font-size:26px}.dark-toggle{width:46px;height:24px}.dark-toggle .toggle-slider{width:16px;height:16px;top:2px;left:2px}.dark-toggle.active .toggle-slider{left:24px}.dark-toggle .toggle-icon{font-size:10px}.top-controls{gap:6px}.api-status{font-size:10px;padding:3px 10px}.dark-toggle-label{font-size:10px}.language-selector .selected-lang{padding:6px 12px;font-size:13px;min-width:100px}.language-selector .dropdown .lang-option{padding:8px 12px;font-size:13px}.page-content{padding:16px 14px}.page-content h2{font-size:19px}}
+</style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <div class="header-left">
-            <h1 id="siteTitle">💱 حول</h1>
-            <span class="badge" id="badgeText">⚡ فوري</span>
-        </div>
-        <div class="api-status" id="apiStatus">
-            <span class="dot online" id="apiDot"></span>
-            <span id="apiStatusText">مباشر</span>
-        </div>
-    </div>
-    <div class="top-controls">
-        <div class="language-selector" id="languageSelector">
-            <div class="selected-lang" id="selectedLang">
-                <span class="flag" id="selectedFlag">🇸🇦</span>
-                <span class="lang-name" id="selectedLangName">العربية</span>
-                <span class="arrow" id="langArrow">▼</span>
-            </div>
-            <div class="dropdown" id="langDropdown">
-                <div class="lang-option active" data-lang="ar"><span class="flag">🇸🇦</span><span class="lang-name">العربية</span><span class="lang-code">AR</span></div>
-                <div class="lang-option" data-lang="en"><span class="flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></div>
-                <div class="lang-option" data-lang="fr"><span class="flag">🇫🇷</span><span class="lang-name">Français</span><span class="lang-code">FR</span></div>
-                <div class="lang-option" data-lang="es"><span class="flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-code">ES</span></div>
-                <div class="lang-option" data-lang="de"><span class="flag">🇩🇪</span><span class="lang-name">Deutsch</span><span class="lang-code">DE</span></div>
-                <div class="lang-option" data-lang="tr"><span class="flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="lang-code">TR</span></div>
-                <div class="lang-option" data-lang="ru"><span class="flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">RU</span></div>
-            </div>
-        </div>
-        <div class="dark-toggle-wrapper">
-            <span class="dark-toggle-label" id="darkLabel">🌙</span>
-            <div class="dark-toggle" id="darkToggle">
-                <span class="toggle-icon sun">☀️</span>
-                <span class="toggle-icon moon">🌙</span>
-                <span class="toggle-slider"></span>
-            </div>
-        </div>
-    </div>
-    <div class="sub" id="subText">أداة تحويل العملات لحظياً بأسعار حقيقية من API</div>
-    <div class="ad-top" id="adTopText">📢 <strong>مساحة إعلان AdSense</strong> — بعد الموافقة، ضع الكود هنا</div>
-    <div id="mainContent">
-        <label for="amount" id="labelAmount">💰 المبلغ</label>
-        <div class="input-group"><input type="number" id="amount" value="100" step="0.01" min="0"></div>
-        <label for="from" id="labelFrom">🔄 من</label>
-        <div class="currency-select-wrapper"><select id="from"></select><span class="select-arrow">▼</span></div>
-        <div style="display:flex; justify-content:center;"><button class="swap-btn" id="swapBtn">⇄</button></div>
-        <label for="to" id="labelTo">🎯 إلى</label>
-        <div class="currency-select-wrapper"><select id="to"></select><span class="select-arrow">▼</span></div>
-        <div class="result-box">
-            <div class="label" id="resultLabel">💵 النتيجة</div>
-            <div class="value" id="result">--- <small>EGP</small></div>
-            <div class="updated-at" id="updatedAt">🔄 جاري التحديث...</div>
-        </div>
-        <div class="history-box"><span id="historyLabel">📋 آخر تحويل</span><span id="historyText">—</span></div>
-    </div>
-    <div id="aboutPage" class="page-content"></div>
-    <div id="privacyPage" class="page-content"></div>
-    <div id="termsPage" class="page-content"></div>
-    <div id="contactPage" class="page-content"></div>
-    <div class="ad-bottom" id="adBottomText">📢 <strong>مساحة إعلان AdSense</strong> — هنا الإعلان الثاني</div>
-    <div class="footer" id="footerText"></div>
+<div class="header">
+<div class="header-left">
+<h1 id="siteTitle">💱 حول</h1>
+<span class="badge" id="badgeText">⚡ فوري</span>
+</div>
+<div class="api-status" id="apiStatus">
+<span class="dot online" id="apiDot"></span>
+<span id="apiStatusText">مباشر</span>
+</div>
+</div>
+<div class="top-controls">
+<div class="language-selector" id="languageSelector">
+<div class="selected-lang" id="selectedLang">
+<span class="flag" id="selectedFlag">🇸🇦</span>
+<span class="lang-name" id="selectedLangName">العربية</span>
+<span class="arrow" id="langArrow">▼</span>
+</div>
+<div class="dropdown" id="langDropdown">
+<div class="lang-option active" data-lang="ar"><span class="flag">🇸🇦</span><span class="lang-name">العربية</span><span class="lang-code">AR</span></div>
+<div class="lang-option" data-lang="en"><span class="flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></div>
+<div class="lang-option" data-lang="fr"><span class="flag">🇫🇷</span><span class="lang-name">Français</span><span class="lang-code">FR</span></div>
+<div class="lang-option" data-lang="es"><span class="flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-code">ES</span></div>
+<div class="lang-option" data-lang="de"><span class="flag">🇩🇪</span><span class="lang-name">Deutsch</span><span class="lang-code">DE</span></div>
+<div class="lang-option" data-lang="tr"><span class="flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="lang-code">TR</span></div>
+<div class="lang-option" data-lang="ru"><span class="flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">RU</span></div>
+</div>
+</div>
+<div class="dark-toggle-wrapper">
+<span class="dark-toggle-label" id="darkLabel">🌙</span>
+<div class="dark-toggle" id="darkToggle">
+<span class="toggle-icon sun">☀️</span>
+<span class="toggle-icon moon">🌙</span>
+<span class="toggle-slider"></span>
+</div>
+</div>
+</div>
+<div class="sub" id="subText">أداة تحويل العملات لحظياً بأسعار حقيقية من API</div>
+<div class="ad-top" id="adTopText">📢 <strong>مساحة إعلان AdSense</strong> — بعد الموافقة، ضع الكود هنا</div>
+<div id="mainContent">
+<label for="amount" id="labelAmount">💰 المبلغ</label>
+<div class="input-group"><input type="number" id="amount" value="100" step="0.01" min="0"></div>
+<label for="from" id="labelFrom">🔄 من</label>
+<div class="currency-select-wrapper"><select id="from"></select><span class="select-arrow">▼</span></div>
+<div style="display:flex;justify-content:center;"><button class="swap-btn" id="swapBtn">⇄</button></div>
+<label for="to" id="labelTo">🎯 إلى</label>
+<div class="currency-select-wrapper"><select id="to"></select><span class="select-arrow">▼</span></div>
+<div class="result-box">
+<div class="label" id="resultLabel">💵 النتيجة</div>
+<div class="value" id="result">--- <small>EGP</small></div>
+<div class="updated-at" id="updatedAt">🔄 جاري التحديث...</div>
+</div>
+<div class="history-box"><span id="historyLabel">📋 آخر تحويل</span><span id="historyText">—</span></div>
+</div>
+<div class="articles-section" id="articlesSection">
+<h2 id="articlesTitle">📚 مقالات تعليمية</h2>
+<div id="articlesList"></div>
+</div>
+<div id="articleView" class="page-content"></div>
+<div id="aboutPage" class="page-content"></div>
+<div id="privacyPage" class="page-content"></div>
+<div id="termsPage" class="page-content"></div>
+<div id="contactPage" class="page-content"></div>
+<div class="ad-bottom" id="adBottomText">📢 <strong>مساحة إعلان AdSense</strong> — هنا الإعلان الثاني</div>
+<div class="footer" id="footerText"></div>
 </div>
 <script>
-// ===== جميع العملات =====
+    // ===== العملات =====
 const ALL_CURRENCIES = [
-    {code:'USD',flag:'🇺🇸',name:{ar:'دولار أمريكي',en:'US Dollar',fr:'Dollar US',es:'Dólar US',de:'US-Dollar',tr:'ABD Doları',ru:'Доллар США'}},
-    {code:'EUR',flag:'🇪🇺',name:{ar:'يورو',en:'Euro',fr:'Euro',es:'Euro',de:'Euro',tr:'Euro',ru:'Евро'}},
-    {code:'SAR',flag:'🇸🇦',name:{ar:'ريال سعودي',en:'Saudi Riyal',fr:'Riyal Saoudien',es:'Riyal Saudí',de:'Saudi-Riyal',tr:'Suudi Riyali',ru:'Саудовский риал'}},
-    {code:'EGP',flag:'🇪🇬',name:{ar:'جنيه مصري',en:'Egyptian Pound',fr:'Livre Égyptienne',es:'Libra Egipcia',de:'Ägyptisches Pfund',tr:'Mısır Lirası',ru:'Египетский фунт'}},
-    {code:'AED',flag:'🇦🇪',name:{ar:'درهم إماراتي',en:'UAE Dirham',fr:'Dirham Émirati',es:'Dirham UAE',de:'VAE-Dirham',tr:'BAE Dirhemi',ru:'Дирхам ОАЭ'}},
-    {code:'GBP',flag:'🇬🇧',name:{ar:'جنيه إسترليني',en:'British Pound',fr:'Livre Sterling',es:'Libra Esterlina',de:'Britisches Pfund',tr:'İngiliz Sterlini',ru:'Британский фунт'}},
-    {code:'KWD',flag:'🇰🇼',name:{ar:'دينار كويتي',en:'Kuwaiti Dinar',fr:'Dinar Koweïtien',es:'Dinar Kuwaití',de:'Kuwait-Dinar',tr:'Kuveyt Dinarı',ru:'Кувейтский динар'}},
-    {code:'QAR',flag:'🇶🇦',name:{ar:'ريال قطري',en:'Qatari Riyal',fr:'Riyal Qatari',es:'Riyal Catarí',de:'Katar-Riyal',tr:'Katar Riyali',ru:'Катарский риал'}},
-    {code:'JOD',flag:'🇯🇴',name:{ar:'دينار أردني',en:'Jordanian Dinar',fr:'Dinar Jordanien',es:'Dinar Jordano',de:'Jordanischer Dinar',tr:'Ürdün Dinarı',ru:'Иорданский динар'}},
-    {code:'TRY',flag:'🇹🇷',name:{ar:'ليرة تركية',en:'Turkish Lira',fr:'Lire Turque',es:'Lira Turca',de:'Türkische Lira',tr:'Türk Lirası',ru:'Турецкая лира'}},
-    {code:'INR',flag:'🇮🇳',name:{ar:'روبية هندية',en:'Indian Rupee',fr:'Roupie Indienne',es:'Rupia India',de:'Indische Rupie',tr:'Hint Rupisi',ru:'Индийская рупия'}},
-    {code:'CNY',flag:'🇨🇳',name:{ar:'يوان صيني',en:'Chinese Yuan',fr:'Yuan Chinois',es:'Yuan Chino',de:'Chinesischer Yuan',tr:'Çin Yuanı',ru:'Китайский юань'}},
-    {code:'CAD',flag:'🇨🇦',name:{ar:'دولار كندي',en:'Canadian Dollar',fr:'Dollar Canadien',es:'Dólar Canadiense',de:'Kanadischer Dollar',tr:'Kanada Doları',ru:'Канадский доллар'}},
-    {code:'CHF',flag:'🇨🇭',name:{ar:'فرنك سويسري',en:'Swiss Franc',fr:'Franc Suisse',es:'Franco Suizo',de:'Schweizer Franken',tr:'İsviçre Frangı',ru:'Швейцарский франк'}},
-    {code:'AUD',flag:'🇦🇺',name:{ar:'دولار أسترالي',en:'Australian Dollar',fr:'Dollar Australien',es:'Dólar Australiano',de:'Australischer Dollar',tr:'Avustralya Doları',ru:'Австралийский доллар'}},
-    {code:'JPY',flag:'🇯🇵',name:{ar:'ين ياباني',en:'Japanese Yen',fr:'Yen Japonais',es:'Yen Japonés',de:'Japanischer Yen',tr:'Japon Yeni',ru:'Японская иена'}},
-    {code:'BHD',flag:'🇧🇭',name:{ar:'دينار بحريني',en:'Bahraini Dinar',fr:'Dinar Bahreïni',es:'Dinar Bahreiní',de:'Bahrain-Dinar',tr:'Bahreyn Dinarı',ru:'Бахрейнский динар'}},
-    {code:'OMR',flag:'🇴🇲',name:{ar:'ريال عماني',en:'Omani Rial',fr:'Rial Omanais',es:'Rial Omaní',de:'Omanischer Rial',tr:'Umman Riyali',ru:'Оманский риал'}},
-    {code:'MAD',flag:'🇲🇦',name:{ar:'درهم مغربي',en:'Moroccan Dirham',fr:'Dirham Marocain',es:'Dirham Marroquí',de:'Marokkanischer Dirham',tr:'Fas Dirhemi',ru:'Марокканский дирхам'}},
-    {code:'DZD',flag:'🇩🇿',name:{ar:'دينار جزائري',en:'Algerian Dinar',fr:'Dinar Algérien',es:'Dinar Argelino',de:'Algerischer Dinar',tr:'Cezayir Dinarı',ru:'Алжирский динар'}},
-    {code:'TND',flag:'🇹🇳',name:{ar:'دينار تونسي',en:'Tunisian Dinar',fr:'Dinar Tunisien',es:'Dinar Tunecino',de:'Tunesischer Dinar',tr:'Tunus Dinarı',ru:'Тунисский динар'}},
-    {code:'LYD',flag:'🇱🇾',name:{ar:'دينار ليبي',en:'Libyan Dinar',fr:'Dinar Libyen',es:'Dinar Libio',de:'Libyscher Dinar',tr:'Libya Dinarı',ru:'Ливийский динар'}},
-    {code:'SDG',flag:'🇸🇩',name:{ar:'جنيه سوداني',en:'Sudanese Pound',fr:'Livre Soudanaise',es:'Libra Sudanesa',de:'Sudanesisches Pfund',tr:'Sudan Lirası',ru:'Суданский фунт'}},
-    {code:'IQD',flag:'🇮🇶',name:{ar:'دينار عراقي',en:'Iraqi Dinar',fr:'Dinar Irakien',es:'Dinar Iraquí',de:'Irakischer Dinar',tr:'Irak Dinarı',ru:'Иракский динар'}},
-    {code:'SYP',flag:'🇸🇾',name:{ar:'ليرة سورية',en:'Syrian Pound',fr:'Livre Syrienne',es:'Libra Siria',de:'Syrisches Pfund',tr:'Suriye Lirası',ru:'Сирийский фунт'}},
-    {code:'LBP',flag:'🇱🇧',name:{ar:'ليرة لبنانية',en:'Lebanese Pound',fr:'Livre Libanaise',es:'Libra Libanesa',de:'Libanesisches Pfund',tr:'Lübnan Lirası',ru:'Ливанский фунт'}},
-    {code:'ILS',flag:'🇮🇱',name:{ar:'شيكل إسرائيلي',en:'Israeli Shekel',fr:'Shekel Israélien',es:'Shekel Israelí',de:'Israelischer Schekel',tr:'İsrail Şekeli',ru:'Израильский шекель'}},
-    {code:'MYR',flag:'🇲🇾',name:{ar:'رينجيت ماليزي',en:'Malaysian Ringgit',fr:'Ringgit Malaisien',es:'Ringgit Malayo',de:'Malaysischer Ringgit',tr:'Malezya Ringgiti',ru:'Малайзийский ринггит'}},
-    {code:'SGD',flag:'🇸🇬',name:{ar:'دولار سنغافوري',en:'Singapore Dollar',fr:'Dollar Singapourien',es:'Dólar de Singapur',de:'Singapur-Dollar',tr:'Singapur Doları',ru:'Сингапурский доллар'}},
-    {code:'THB',flag:'🇹🇭',name:{ar:'بات تايلندي',en:'Thai Baht',fr:'Baht Thaïlandais',es:'Baht Tailandés',de:'Thailändischer Baht',tr:'Tayland Bahtı',ru:'Тайский бат'}},
-    {code:'VND',flag:'🇻🇳',name:{ar:'دونج فيتنامي',en:'Vietnamese Dong',fr:'Dong Vietnamien',es:'Dong Vietnamita',de:'Vietnamesischer Dong',tr:'Vietnam Dongu',ru:'Вьетнамский донг'}},
-    {code:'PHP',flag:'🇵🇭',name:{ar:'بيزو فلبيني',en:'Philippine Peso',fr:'Peso Philippin',es:'Peso Filipino',de:'Philippinischer Peso',tr:'Filipin Pesosu',ru:'Филиппинское песо'}},
-    {code:'IDR',flag:'🇮🇩',name:{ar:'روبية إندونيسية',en:'Indonesian Rupiah',fr:'Roupie Indonésienne',es:'Rupia Indonesia',de:'Indonesische Rupiah',tr:'Endonezya Rupisi',ru:'Индонезийская рупия'}},
-    {code:'PKR',flag:'🇵🇰',name:{ar:'روبية باكستانية',en:'Pakistani Rupee',fr:'Roupie Pakistanaise',es:'Rupia Pakistaní',de:'Pakistanische Rupie',tr:'Pakistan Rupisi',ru:'Пакистанская рупия'}},
-    {code:'BDT',flag:'🇧🇩',name:{ar:'تاكا بنغلاديشي',en:'Bangladeshi Taka',fr:'Taka Bangladeshi',es:'Taka Bangladesí',de:'Bangladeschischer Taka',tr:'Bangladeş Takası',ru:'Бангладешская така'}},
-    {code:'NGN',flag:'🇳🇬',name:{ar:'نايرا نيجيري',en:'Nigerian Naira',fr:'Naira Nigérian',es:'Naira Nigeriano',de:'Nigerianischer Naira',tr:'Nijerya Nairası',ru:'Нигерийская найра'}},
-    {code:'ZAR',flag:'🇿🇦',name:{ar:'راند جنوب أفريقي',en:'South African Rand',fr:'Rand Sud-Africain',es:'Rand Sudafricano',de:'Südafrikanischer Rand',tr:'Güney Afrika Randı',ru:'Южноафриканский ранд'}},
-    {code:'BRL',flag:'🇧🇷',name:{ar:'ريال برازيلي',en:'Brazilian Real',fr:'Real Brésilien',es:'Real Brasileño',de:'Brasilianischer Real',tr:'Brezilya Reali',ru:'Бразильский реал'}},
-    {code:'MXN',flag:'🇲🇽',name:{ar:'بيزو مكسيكي',en:'Mexican Peso',fr:'Peso Mexicain',es:'Peso Mexicano',de:'Mexikanischer Peso',tr:'Meksika Pesosu',ru:'Мексиканское песо'}},
-    {code:'RUB',flag:'🇷🇺',name:{ar:'روبل روسي',en:'Russian Ruble',fr:'Rouble Russe',es:'Rublo Ruso',de:'Russischer Rubel',tr:'Rus Rublesi',ru:'Российский рубль'}}
+{code:'USD',flag:'🇺🇸',name:{ar:'دولار أمريكي',en:'US Dollar',fr:'Dollar US',es:'Dólar US',de:'US-Dollar',tr:'ABD Doları',ru:'Доллар США'}},
+{code:'EUR',flag:'🇪🇺',name:{ar:'يورو',en:'Euro',fr:'Euro',es:'Euro',de:'Euro',tr:'Euro',ru:'Евро'}},
+{code:'SAR',flag:'🇸🇦',name:{ar:'ريال سعودي',en:'Saudi Riyal',fr:'Riyal Saoudien',es:'Riyal Saudí',de:'Saudi-Riyal',tr:'Suudi Riyali',ru:'Саудовский риал'}},
+{code:'EGP',flag:'🇪🇬',name:{ar:'جنيه مصري',en:'Egyptian Pound',fr:'Livre Égyptienne',es:'Libra Egipcia',de:'Ägyptisches Pfund',tr:'Mısır Lirası',ru:'Египетский фунт'}},
+{code:'AED',flag:'🇦🇪',name:{ar:'درهم إماراتي',en:'UAE Dirham',fr:'Dirham Émirati',es:'Dirham UAE',de:'VAE-Dirham',tr:'BAE Dirhemi',ru:'Дирхам ОАЭ'}},
+{code:'GBP',flag:'🇬🇧',name:{ar:'جنيه إسترليني',en:'British Pound',fr:'Livre Sterling',es:'Libra Esterlina',de:'Britisches Pfund',tr:'İngiliz Sterlini',ru:'Британский фунт'}},
+{code:'KWD',flag:'🇰🇼',name:{ar:'دينار كويتي',en:'Kuwaiti Dinar',fr:'Dinar Koweïtien',es:'Dinar Kuwaití',de:'Kuwait-Dinar',tr:'Kuveyt Dinarı',ru:'Кувейтский динар'}},
+{code:'QAR',flag:'🇶🇦',name:{ar:'ريال قطري',en:'Qatari Riyal',fr:'Riyal Qatari',es:'Riyal Catarí',de:'Katar-Riyal',tr:'Katar Riyali',ru:'Катарский риал'}},
+{code:'JOD',flag:'🇯🇴',name:{ar:'دينار أردني',en:'Jordanian Dinar',fr:'Dinar Jordanien',es:'Dinar Jordano',de:'Jordanischer Dinar',tr:'Ürdün Dinarı',ru:'Иорданский динар'}},
+{code:'TRY',flag:'🇹🇷',name:{ar:'ليرة تركية',en:'Turkish Lira',fr:'Lire Turque',es:'Lira Turca',de:'Türkische Lira',tr:'Türk Lirası',ru:'Турецкая лира'}},
+{code:'INR',flag:'🇮🇳',name:{ar:'روبية هندية',en:'Indian Rupee',fr:'Roupie Indienne',es:'Rupia India',de:'Indische Rupie',tr:'Hint Rupisi',ru:'Индийская рупия'}},
+{code:'CNY',flag:'🇨🇳',name:{ar:'يوان صيني',en:'Chinese Yuan',fr:'Yuan Chinois',es:'Yuan Chino',de:'Chinesischer Yuan',tr:'Çin Yuanı',ru:'Китайский юань'}},
+{code:'CAD',flag:'🇨🇦',name:{ar:'دولار كندي',en:'Canadian Dollar',fr:'Dollar Canadien',es:'Dólar Canadiense',de:'Kanadischer Dollar',tr:'Kanada Doları',ru:'Канадский доллар'}},
+{code:'CHF',flag:'🇨🇭',name:{ar:'فرنك سويسري',en:'Swiss Franc',fr:'Franc Suisse',es:'Franco Suizo',de:'Schweizer Franken',tr:'İsviçre Frangı',ru:'Швейцарский франк'}},
+{code:'AUD',flag:'🇦🇺',name:{ar:'دولار أسترالي',en:'Australian Dollar',fr:'Dollar Australien',es:'Dólar Australiano',de:'Australischer Dollar',tr:'Avustralya Doları',ru:'Австралийский доллар'}},
+{code:'JPY',flag:'🇯🇵',name:{ar:'ين ياباني',en:'Japanese Yen',fr:'Yen Japonais',es:'Yen Japonés',de:'Japanischer Yen',tr:'Japon Yeni',ru:'Японская иена'}},
+{code:'BHD',flag:'🇧🇭',name:{ar:'دينار بحريني',en:'Bahraini Dinar',fr:'Dinar Bahreïni',es:'Dinar Bahreiní',de:'Bahrain-Dinar',tr:'Bahreyn Dinarı',ru:'Бахрейнский динар'}},
+{code:'OMR',flag:'🇴🇲',name:{ar:'ريال عماني',en:'Omani Rial',fr:'Rial Omanais',es:'Rial Omaní',de:'Omanischer Rial',tr:'Umman Riyali',ru:'Оманский риал'}},
+{code:'MAD',flag:'🇲🇦',name:{ar:'درهم مغربي',en:'Moroccan Dirham',fr:'Dirham Marocain',es:'Dirham Marroquí',de:'Marokkanischer Dirham',tr:'Fas Dirhemi',ru:'Марокканский дирхам'}},
+{code:'DZD',flag:'🇩🇿',name:{ar:'دينار جزائري',en:'Algerian Dinar',fr:'Dinar Algérien',es:'Dinar Argelino',de:'Algerischer Dinar',tr:'Cezayir Dinarı',ru:'Алжирский динар'}},
+{code:'TND',flag:'🇹🇳',name:{ar:'دينار تونسي',en:'Tunisian Dinar',fr:'Dinar Tunisien',es:'Dinar Tunecino',de:'Tunesischer Dinar',tr:'Tunus Dinarı',ru:'Тунисский динар'}},
+{code:'LYD',flag:'🇱🇾',name:{ar:'دينار ليبي',en:'Libyan Dinar',fr:'Dinar Libyen',es:'Dinar Libio',de:'Libyscher Dinar',tr:'Libya Dinarı',ru:'Ливийский динар'}},
+{code:'SDG',flag:'🇸🇩',name:{ar:'جنيه سوداني',en:'Sudanese Pound',fr:'Livre Soudanaise',es:'Libra Sudanesa',de:'Sudanesisches Pfund',tr:'Sudan Lirası',ru:'Суданский фунт'}},
+{code:'IQD',flag:'🇮🇶',name:{ar:'دينار عراقي',en:'Iraqi Dinar',fr:'Dinar Irakien',es:'Dinar Iraquí',de:'Irakischer Dinar',tr:'Irak Dinarı',ru:'Иракский динар'}},
+{code:'SYP',flag:'🇸🇾',name:{ar:'ليرة سورية',en:'Syrian Pound',fr:'Livre Syrienne',es:'Libra Siria',de:'Syrisches Pfund',tr:'Suriye Lirası',ru:'Сирийский фунт'}},
+{code:'LBP',flag:'🇱🇧',name:{ar:'ليرة لبنانية',en:'Lebanese Pound',fr:'Livre Libanaise',es:'Libra Libanesa',de:'Libanesisches Pfund',tr:'Lübnan Lirası',ru:'Ливанский фунт'}},
+{code:'ILS',flag:'🇮🇱',name:{ar:'شيكل إسرائيلي',en:'Israeli Shekel',fr:'Shekel Israélien',es:'Shekel Israelí',de:'Israelischer Schekel',tr:'İsrail Şekeli',ru:'Израильский шекель'}},
+{code:'MYR',flag:'🇲🇾',name:{ar:'رينجيت ماليزي',en:'Malaysian Ringgit',fr:'Ringgit Malaisien',es:'Ringgit Malayo',de:'Malaysischer Ringgit',tr:'Malezya Ringgiti',ru:'Малайзийский ринггит'}},
+{code:'SGD',flag:'🇸🇬',name:{ar:'دولار سنغافوري',en:'Singapore Dollar',fr:'Dollar Singapourien',es:'Dólar de Singapur',de:'Singapur-Dollar',tr:'Singapur Doları',ru:'Сингапурский доллар'}},
+{code:'THB',flag:'🇹🇭',name:{ar:'بات تايلندي',en:'Thai Baht',fr:'Baht Thaïlandais',es:'Baht Tailandés',de:'Thailändischer Baht',tr:'Tayland Bahtı',ru:'Тайский бат'}},
+{code:'VND',flag:'🇻🇳',name:{ar:'دونج فيتنامي',en:'Vietnamese Dong',fr:'Dong Vietnamien',es:'Dong Vietnamita',de:'Vietnamesischer Dong',tr:'Vietnam Dongu',ru:'Вьетнамский донг'}},
+{code:'PHP',flag:'🇵🇭',name:{ar:'بيزو فلبيني',en:'Philippine Peso',fr:'Peso Philippin',es:'Peso Filipino',de:'Philippinischer Peso',tr:'Filipin Pesosu',ru:'Филиппинское песо'}},
+{code:'IDR',flag:'🇮🇩',name:{ar:'روبية إندونيسية',en:'Indonesian Rupiah',fr:'Roupie Indonésienne',es:'Rupia Indonesia',de:'Indonesische Rupiah',tr:'Endonezya Rupisi',ru:'Индонезийская рупия'}},
+{code:'PKR',flag:'🇵🇰',name:{ar:'روبية باكستانية',en:'Pakistani Rupee',fr:'Roupie Pakistanaise',es:'Rupia Pakistaní',de:'Pakistanische Rupie',tr:'Pakistan Rupisi',ru:'Пакистанская рупия'}},
+{code:'BDT',flag:'🇧🇩',name:{ar:'تاكا بنغلاديشي',en:'Bangladeshi Taka',fr:'Taka Bangladeshi',es:'Taka Bangladesí',de:'Bangladeschischer Taka',tr:'Bangladeş Takası',ru:'Бангладешская така'}},
+{code:'NGN',flag:'🇳🇬',name:{ar:'نايرا نيجيري',en:'Nigerian Naira',fr:'Naira Nigérian',es:'Naira Nigeriano',de:'Nigerianischer Naira',tr:'Nijerya Nairası',ru:'Нигерийская найра'}},
+{code:'ZAR',flag:'🇿🇦',name:{ar:'راند جنوب أفريقي',en:'South African Rand',fr:'Rand Sud-Africain',es:'Rand Sudafricano',de:'Südafrikanischer Rand',tr:'Güney Afrika Randı',ru:'Южноафриканский ранд'}},
+{code:'BRL',flag:'🇧🇷',name:{ar:'ريال برازيلي',en:'Brazilian Real',fr:'Real Brésilien',es:'Real Brasileño',de:'Brasilianischer Real',tr:'Brezilya Reali',ru:'Бразильский реал'}},
+{code:'MXN',flag:'🇲🇽',name:{ar:'بيزو مكسيكي',en:'Mexican Peso',fr:'Peso Mexicain',es:'Peso Mexicano',de:'Mexikanischer Peso',tr:'Meksika Pesosu',ru:'Мексиканское песо'}},
+{code:'RUB',flag:'🇷🇺',name:{ar:'روبل روسي',en:'Russian Ruble',fr:'Rouble Russe',es:'Rublo Ruso',de:'Russischer Rubel',tr:'Rus Rublesi',ru:'Российский рубль'}}
 ];
 const FAVORITE_CODES = ['USD','EUR','SAR','EGP','AED','GBP','TRY'];
 const FALLBACK_RATES = {USD:1,EUR:0.92,SAR:3.75,EGP:48.5,AED:3.67,GBP:0.79,KWD:0.306,QAR:3.64,JOD:0.709,TRY:34.2,INR:83.5,CNY:7.25,CAD:1.36,CHF:0.88,AUD:1.52,JPY:149.5,BHD:0.376,OMR:0.385,MAD:10.1,DZD:134.5,TND:3.12,LYD:4.85,SDG:600,IQD:1310,SYP:13000,LBP:15000,ILS:3.72,MYR:4.72,SGD:1.34,THB:36.2,VND:24500,PHP:56.8,IDR:15600,PKR:279,BDT:109.5,NGN:1540,ZAR:18.9,BRL:5.02,MXN:17.2,RUB:92.5};
+
+// ===== المقالات (6 مقالات عربية) =====
+const ARTICLES = [
+{id:1,title:{ar:'ما هو تحويل العملات ولماذا هو مهم؟',en:'What is Currency Conversion and Why It Matters?'},excerpt:{ar:'تعرف على مفهوم تحويل العملات وأهميته في حياتنا اليومية والاقتصاد العالمي.',en:'Learn about currency conversion and its importance in daily life and global economy.'},body:{ar:`<h2>ما هو تحويل العملات ولماذا هو مهم؟</h2><p>تحويل العملات هو عملية تبادل عملة بأخرى بناءً على سعر الصرف السائد في السوق. هذه العملية أساسية في التجارة الدولية والسفر والاستثمار وتحويل الأموال بين الدول.</p><h3>أهمية تحويل العملات</h3><p>تكمن أهمية تحويل العملات في عدة جوانب:</p><ul><li><strong>التجارة الدولية:</strong> الشركات تحتاج لتحويل العملات لدفع ثمن البضائع والخدمات من دول أخرى.</li><li><strong>السفر والسياحة:</strong> المسافرون يحتاجون لتحويل أموالهم لعملة البلد الذي يزورونه.</li><li><strong>الاستثمار:</strong> المستثمرون يحولون العملات للاستثمار في أسواق مختلفة.</li><li><strong>تحويل الأموال:</strong> العمال المغتربون يحولون أموالهم لعائلاتهم في بلدانهم.</li></ul><h3>كيف يتم تحديد أسعار الصرف؟</h3><p>أسعار الصرف تتحدد بناءً على العرض والطلب في سوق العملات العالمي، والذي يعمل على مدار 24 ساعة. هناك عوامل عديدة تؤثر على هذه الأسعار مثل التضخم وأسعار الفائدة والاستقرار السياسي والأداء الاقتصادي.</p><h3>الخلاصة</h3><p>تحويل العملات عملية حيوية في عالمنا المعاصر، وفهمها يساعد الأفراد والشركات على اتخاذ قرارات مالية أفضل.</p>`,en:`<h2>What is Currency Conversion and Why It Matters?</h2><p>Currency conversion is the process of exchanging one currency for another based on the prevailing exchange rate in the market. This process is essential in international trade, travel, investment, and money transfers between countries.</p><h3>Importance of Currency Conversion</h3><p>The importance of currency conversion lies in several aspects:</p><ul><li><strong>International Trade:</strong> Companies need to convert currencies to pay for goods and services from other countries.</li><li><strong>Travel and Tourism:</strong> Travelers need to convert their money to the currency of the country they are visiting.</li><li><strong>Investment:</strong> Investors convert currencies to invest in different markets.</li><li><strong>Money Transfers:</strong> Expatriate workers send money to their families in their home countries.</li></ul><h3>How are Exchange Rates Determined?</h3><p>Exchange rates are determined by supply and demand in the global currency market, which operates 24 hours a day. Many factors affect these rates such as inflation, interest rates, political stability, and economic performance.</p><h3>Conclusion</h3><p>Currency conversion is a vital process in our modern world, and understanding it helps individuals and companies make better financial decisions.</p>`}},
+{id:2,title:{ar:'كيف تقرأ أسعار الصرف وتفهمها؟',en:'How to Read and Understand Exchange Rates?'},excerpt:{ar:'دليل شامل لفهم كيفية قراءة أسعار الصرف وتفسير الأرقام المختلفة.',en:'A comprehensive guide to understanding how to read exchange rates.'},body:{ar:`<h2>كيف تقرأ أسعار الصرف وتفهمها؟</h2><p>سعر الصرف هو قيمة عملة واحدة مقابل عملة أخرى. على سبيل المثال، إذا كان سعر صرف الدولار الأمريكي مقابل الريال السعودي هو 3.75، فهذا يعني أن كل دولار أمريكي يساوي 3.75 ريال سعودي.</p><h3>أنواع أسعار الصرف</h3><ul><li><strong>سعر الشراء (Bid):</strong> السعر الذي يشتري به البنك العملة منك.</li><li><strong>سعر البيع (Ask):</strong> السعر الذي يبيع به البنك العملة لك.</li><li><strong>الفرق (Spread):</strong> الفرق بين سعري الشراء والبيع، وهو ربح البنك.</li></ul><h3>كيف تقرأ السعر؟</h3><p>عندما ترى زوج عملات مثل USD/SAR = 3.75، فالعملة الأولى (USD) هي العملة الأساسية، والثانية (SAR) هي عملة التسعير. الرقم يعني أن 1 دولار = 3.75 ريال.</p><h3>نصائح لفهم الأسعار</h3><ul><li>راقب الأسعار بانتظام لتفهم الاتجاهات.</li><li>قارن الأسعار بين مصادر مختلفة.</li><li>انتبه للرسوم والعمولات الإضافية.</li></ul><h3>الخلاصة</h3><p>فهم أسعار الصرف يساعدك على اتخاذ قرارات مالية أفضل والحصول على أفضل قيمة عند التحويل.</p>`,en:`<h2>How to Read and Understand Exchange Rates?</h2><p>An exchange rate is the value of one currency against another. For example, if the USD to SAR exchange rate is 3.75, it means every US dollar equals 3.75 Saudi Riyals.</p><h3>Types of Exchange Rates</h3><ul><li><strong>Bid Rate:</strong> The rate at which the bank buys currency from you.</li><li><strong>Ask Rate:</strong> The rate at which the bank sells currency to you.</li><li><strong>Spread:</strong> The difference between bid and ask rates, which is the bank's profit.</li></ul><h3>How to Read the Rate?</h3><p>When you see a currency pair like USD/SAR = 3.75, the first currency (USD) is the base currency, and the second (SAR) is the quote currency. The number means 1 USD = 3.75 SAR.</p><h3>Tips for Understanding Rates</h3><ul><li>Monitor rates regularly to understand trends.</li><li>Compare rates from different sources.</li><li>Watch out for additional fees and commissions.</li></ul><h3>Conclusion</h3><p>Understanding exchange rates helps you make better financial decisions and get the best value when converting.</p>`}},
+{id:3,title:{ar:'أفضل 5 نصائح لتحويل العملات بأقل تكلفة',en:'Top 5 Tips to Convert Currencies at the Lowest Cost'},excerpt:{ar:'تعلم كيف توفر المال عند تحويل العملات من خلال نصائح عملية مجربة.',en:'Learn how to save money when converting currencies with practical tips.'},body:{ar:`<h2>أفضل 5 نصائح لتحويل العملات بأقل تكلفة</h2><p>تحويل العملات قد يكلفك الكثير إذا لم تكن حذراً. إليك أفضل النصائح لتوفير المال:</p><h3>1. قارن الأسعار قبل التحويل</h3><p>لا تحول أموالك عند أول مكان تجده. قارن الأسعار بين البنوك ومكاتب الصرافة والخدمات الإلكترونية للحصول على أفضل سعر.</p><h3>2. تجنب التحويل في المطارات</h3><p>أسعار الصرف في المطارات عادةً ما تكون سيئة جداً بسبب الرسوم العالية. حاول تحويل أموالك قبل السفر أو بعد الوصول للمدينة.</p><h3>3. استخدم البطاقات بدون رسوم تحويل</h3><p>بعض البطاقات البنكية لا تفرض رسوم تحويل عند الدفع بالعملات الأجنبية. ابحث عن هذه البطاقات واستخدمها.</p><h3>4. حوّل مبالغ كبيرة دفعة واحدة</h3><p>بدلاً من تحويل مبالغ صغيرة متكررة، حوّل مبلغاً كبيراً مرة واحدة لتوفير الرسوم الثابتة.</p><h3>5. راقب أسعار الصرف</h3><p>تابع أسعار الصرف يومياً وحوّل عندما يكون السعر في صالحك. استخدم أدوات مثل محول العملات الذكي لمتابعة الأسعار.</p><h3>الخلاصة</h3><p>باتباع هذه النصائح، يمكنك توفير مبالغ كبيرة عند تحويل العملات.</p>`,en:`<h2>Top 5 Tips to Convert Currencies at the Lowest Cost</h2><p>Currency conversion can cost you a lot if you're not careful. Here are the best tips to save money:</p><h3>1. Compare Rates Before Converting</h3><p>Don't convert your money at the first place you find. Compare rates between banks, exchange offices, and online services to get the best rate.</p><h3>2. Avoid Converting at Airports</h3><p>Airport exchange rates are usually very bad due to high fees. Try to convert your money before traveling or after arriving in the city.</p><h3>3. Use Cards with No Conversion Fees</h3><p>Some bank cards don't charge conversion fees when paying in foreign currencies. Look for these cards and use them.</p><h3>4. Convert Large Amounts at Once</h3><p>Instead of frequent small conversions, convert a large amount once to save on fixed fees.</p><h3>5. Monitor Exchange Rates</h3><p>Track exchange rates daily and convert when the rate is in your favor. Use tools like Smart Currency Converter to monitor rates.</p><h3>Conclusion</h3><p>By following these tips, you can save significant amounts when converting currencies.</p>`}},
+{id:4,title:{ar:'الفرق بين سعر الصرف الرسمي وسعر السوق',en:'Difference Between Official and Market Exchange Rates'},excerpt:{ar:'اكتشف الفرق بين السعر الرسمي وسعر السوق السوداء وأثره على اقتصادك.',en:'Discover the difference between official and black market rates.'},body:{ar:`<h2>الفرق بين سعر الصرف الرسمي وسعر السوق</h2><p>في بعض الدول، يوجد فرق كبير بين سعر الصرف الرسمي الذي تحدده الحكومة وسعر السوق الحقيقي. فهم هذا الفرق مهم جداً.</p><h3>سعر الصرف الرسمي</h3><p>هو السعر الذي تحدده البنوك المركزية أو الحكومات. يُستخدم في المعاملات الرسمية والبنكية.</p><h3>سعر السوق (الموازي)</h3><p>هو السعر الحقيقي الذي يتداول به الناس في السوق. يتحدد بناءً على العرض والطلب الحقيقي.</p><h3>أسباب الفرق</h3><ul><li>قيود على العملة الأجنبية.</li><li>سياسات نقدية حكومية.</li><li>الطلب المتزايد على العملات الأجنبية.</li><li>مشاكل اقتصادية.</li></ul><h3>أثر الفرق على المواطنين</h3><p>الفرق الكبير بين السعرين يؤثر سلباً على المواطنين، حيث يجدون صعوبة في الحصول على العملات الأجنبية بالسعر الرسمي، مما يدفعهم للجوء للسوق الموازي بأسعار أعلى.</p><h3>الخلاصة</h3><p>فهم الفرق بين السعر الرسمي وسعر السوق يساعدك على اتخاذ قرارات أفضل عند تحويل الأموال.</p>`,en:`<h2>Difference Between Official and Market Exchange Rates</h2><p>In some countries, there's a big difference between the official exchange rate set by the government and the real market rate. Understanding this difference is crucial.</p><h3>Official Exchange Rate</h3><p>It's the rate set by central banks or governments. Used in official and banking transactions.</p><h3>Market (Parallel) Rate</h3><p>It's the real rate people trade at in the market. Determined by real supply and demand.</p><h3>Reasons for the Difference</h3><ul><li>Restrictions on foreign currency.</li><li>Government monetary policies.</li><li>Increasing demand for foreign currencies.</li><li>Economic problems.</li></ul><h3>Impact on Citizens</h3><p>The big difference between the two rates negatively affects citizens, as they find it difficult to get foreign currencies at the official rate, pushing them to the parallel market at higher prices.</p><h3>Conclusion</h3><p>Understanding the difference between official and market rates helps you make better decisions when transferring money.</p>`}},
+{id:5,title:{ar:'تاريخ العملات: من المقايضة إلى العملات الرقمية',en:'History of Currency: From Barter to Digital Currencies'},excerpt:{ar:'رحلة ممتعة عبر تاريخ العملات وكيف تطورت عبر العصور.',en:'An interesting journey through the history of currency.'},body:{ar:`<h2>تاريخ العملات: من المقايضة إلى العملات الرقمية</h2><p>العملات لم تكن دائماً كما نعرفها اليوم. تطورت عبر آلاف السنين لتصبح ما هي عليه الآن.</p><h3>عصر المقايضة</h3><p>قبل اختراع النقود، كان الناس يتبادلون البضائع مباشرة. مثلاً، شخص يعطي قمحاً مقابل قطعة قماش. لكن هذه الطريقة كانت صعبة لأنها تحتاج توافق رغبات الطرفين.</p><h3>العملات السلعية</h3><p>بدأ الناس باستخدام سلع ثمينة كوسيط للتبادل، مثل الملح والذهب والفضة. هذه السلع كانت مقبولة من الجميع.</p><h3>النقود المعدنية</h3><p>ثم بدأت الحضارات بسك العملات المعدنية من الذهب والفضة. الليديون كانوا أول من سك العملات في القرن السابع قبل الميلاد.</p><h3>النقود الورقية</h3><p>ظهرت النقود الورقية في الصين في القرن السابع الميلادي، ثم انتشرت في أوروبا. كانت في البداية تمثل كمية من الذهب محفوظة في البنك.</p><h3>العملات الرقمية</h3><p>اليوم، نستخدم العملات الرقمية مثل البيتكوين والإيثيريوم، والتي لا وجود مادي لها. تعتمد على تقنية البلوكتشين.</p><h3>الخلاصة</h3><p>تاريخ العملات يعكس تطور الحضارة الإنسانية، ومن المتوقع أن يستمر التطور في المستقبل.</p>`,en:`<h2>History of Currency: From Barter to Digital Currencies</h2><p>Currencies weren't always as we know them today. They evolved over thousands of years to become what they are now.</p><h3>The Barter Era</h3><p>Before money was invented, people exchanged goods directly. For example, someone gives wheat for a piece of cloth. But this method was difficult as it required mutual agreement.</p><h3>Commodity Money</h3><p>People started using valuable commodities as a medium of exchange, such as salt, gold, and silver. These were accepted by everyone.</p><h3>Coins</h3><p>Then civilizations began minting coins from gold and silver. The Lydians were the first to mint coins in the 7th century BC.</p><h3>Paper Money</h3><p>Paper money appeared in China in the 7th century AD, then spread to Europe. It initially represented an amount of gold stored in the bank.</p><h3>Digital Currencies</h3><p>Today, we use digital currencies like Bitcoin and Ethereum, which have no physical existence. They rely on blockchain technology.</p><h3>Conclusion</h3><p>The history of currency reflects the evolution of human civilization, and development is expected to continue in the future.</p>`}},
+{id:6,title:{ar:'أكثر 10 عملات تداولاً في العالم',en:'Top 10 Most Traded Currencies in the World'},excerpt:{ar:'تعرف على أكثر العملات تداولاً في الأسواق العالمية وأهميتها.',en:'Learn about the most traded currencies in global markets.'},body:{ar:`<h2>أكثر 10 عملات تداولاً في العالم</h2><p>سوق العملات العالمي هو أكبر سوق مالي في العالم بحجم تداول يومي يتجاوز 7 تريليونات دولار. إليك أكثر العملات تداولاً:</p><h3>1. الدولار الأمريكي (USD)</h3><p>العملة الأكثر تداولاً في العالم، ويستخدم في أكثر من 88% من المعاملات.</p><h3>2. اليورو (EUR)</h3><p>عملة منطقة اليورو، ثاني أكثر العملات تداولاً بحصة تصل إلى 30%.</p><h3>3. الين الياباني (JPY)</h3><p>عملة اليابان، ثالث أكثر العملات تداولاً، ويُعتبر ملاذاً آمناً.</p><h3>4. الجنيه الإسترليني (GBP)</h3><p>عملة المملكة المتحدة، من أقدم العملات وأكثرها تداولاً.</p><h3>5. الدولار الأسترالي (AUD)</h3><p>عملة أستراليا، مرتبطة بأسعار السلع الأساسية.</p><h3>6. الدولار الكندي (CAD)</h3><p>عملة كندا، مرتبطة بأسعار النفط.</p><h3>7. الفرنك السويسري (CHF)</h3><p>عملة سويسرا، تُعتبر ملاذاً آمناً في أوقات الأزمات.</p><h3>8. اليوان الصيني (CNY)</h3><p>عملة الصين، ثاني أكبر اقتصاد في العالم.</p><h3>9. الدولار النيوزيلندي (NZD)</h3><p>عملة نيوزيلندا، مرتبطة بالسلع الزراعية.</p><h3>10. الكرونة السويدية (SEK)</h3><p>عملة السويد، من أكثر العملات استقراراً.</p><h3>الخلاصة</h3><p>معرفة أكثر العملات تداولاً يساعدك على فهم سوق العملات العالمي واتخاذ قرارات أفضل.</p>`,en:`<h2>Top 10 Most Traded Currencies in the World</h2><p>The global currency market is the largest financial market in the world with a daily trading volume exceeding 7 trillion dollars. Here are the most traded currencies:</p><h3>1. US Dollar (USD)</h3><p>The most traded currency in the world, used in over 88% of transactions.</p><h3>2. Euro (EUR)</h3><p>The Eurozone currency, the second most traded currency with a share of up to 30%.</p><h3>3. Japanese Yen (JPY)</h3><p>Japan's currency, the third most traded currency, considered a safe haven.</p><h3>4. British Pound (GBP)</h3><p>UK's currency, one of the oldest and most traded currencies.</p><h3>5. Australian Dollar (AUD)</h3><p>Australia's currency, linked to commodity prices.</p><h3>6. Canadian Dollar (CAD)</h3><p>Canada's currency, linked to oil prices.</p><h3>7. Swiss Franc (CHF)</h3><p>Switzerland's currency, considered a safe haven in times of crisis.</p><h3>8. Chinese Yuan (CNY)</h3><p>China's currency, the second-largest economy in the world.</p><h3>9. New Zealand Dollar (NZD)</h3><p>New Zealand's currency, linked to agricultural commodities.</p><h3>10. Swedish Krona (SEK)</h3><p>Sweden's currency, one of the most stable currencies.</p><h3>Conclusion</h3><p>Knowing the most traded currencies helps you understand the global currency market and make better decisions.</p>`}}
+];
 
 let currentRates = {...FALLBACK_RATES};
 let lastUpdate = null;
 let isApiOnline = false;
 let currentLang = localStorage.getItem('preferredLang') || 'ar';
 let isDark = localStorage.getItem('darkMode') === 'true';
-// ===== عناصر الصفحة =====
-const els = {
-    title: document.getElementById('siteTitle'), badge: document.getElementById('badgeText'),
-    sub: document.getElementById('subText'), adTop: document.getElementById('adTopText'),
-    labelAmount: document.getElementById('labelAmount'), labelFrom: document.getElementById('labelFrom'),
-    labelTo: document.getElementById('labelTo'), resultLabel: document.getElementById('resultLabel'),
-    historyLabel: document.getElementById('historyLabel'), adBottom: document.getElementById('adBottomText'),
-    footer: document.getElementById('footerText'), apiStatus: document.getElementById('apiStatusText'),
-    apiDot: document.getElementById('apiDot'), updatedAt: document.getElementById('updatedAt'),
-    darkLabel: document.getElementById('darkLabel')
-};
-const fromSelect = document.getElementById('from'), toSelect = document.getElementById('to');
-const amountInput = document.getElementById('amount'), resultSpan = document.getElementById('result');
-const historySpan = document.getElementById('historyText'), swapBtn = document.getElementById('swapBtn');
-const darkToggle = document.getElementById('darkToggle');
-const languageSelector = document.getElementById('languageSelector');
-const selectedLang = document.getElementById('selectedLang'), selectedFlag = document.getElementById('selectedFlag');
-const selectedLangName = document.getElementById('selectedLangName'), langDropdown = document.getElementById('langDropdown');
-const langArrow = document.getElementById('langArrow'), langOptions = document.querySelectorAll('.lang-option');
-const aboutPage = document.getElementById('aboutPage'), privacyPage = document.getElementById('privacyPage');
-const termsPage = document.getElementById('termsPage'), contactPage = document.getElementById('contactPage');
 
-// ===== محتوى الصفحات (مختصر) =====
-function getPageContent(lang) {
-    const t = {
-        about: {
-            ar: '<h2>👤 من نحن</h2><div class="developer-info"><p>👨‍💻 أنا <strong>عبدالباري</strong>، مطور مستقل شغوف بتقنية الويب.</p></div><p>قمت ببناء هذه الأداة لتكون <strong>بسيطة، سريعة، ودقيقة</strong>.</p><p>🎯 <strong>هدفي:</strong> تقديم تجربة تحويل عملات ممتازة للمستخدمين حول العالم.</p><p>📧 للاستفسار: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',
-            en: '<h2>👤 About Us</h2><div class="developer-info"><p>👨‍💻 I\'m <strong>Abdulbari</strong>, an independent developer passionate about web technology.</p></div><p>I built this tool to be <strong>simple, fast, and accurate</strong>.</p><p>🎯 <strong>My goal:</strong> Provide excellent currency conversion experience worldwide.</p><p>📧 For inquiries: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>',
-            fr: '<h2>👤 À propos</h2><div class="developer-info"><p>👨‍💻 Je suis <strong>Abdulbari</strong>, développeur indépendant passionné par le web.</p></div><p>J\'ai construit cet outil <strong>simple, rapide et précis</strong>.</p><p>🎯 <strong>Mon objectif:</strong> Offrir une excellente expérience de conversion.</p><p>📧 Contact: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Retour</button>',
-            es: '<h2>👤 Sobre nosotros</h2><div class="developer-info"><p>👨‍💻 Soy <strong>Abdulbari</strong>, desarrollador independiente apasionado por la tecnología web.</p></div><p>Construí esta herramienta <strong>simple, rápida y precisa</strong>.</p><p>🎯 <strong>Mi objetivo:</strong> Excelente experiencia de conversión.</p><p>📧 Contacto: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Volver</button>',
-            de: '<h2>👤 Über uns</h2><div class="developer-info"><p>👨‍💻 Ich bin <strong>Abdulbari</strong>, unabhängiger Entwickler mit Leidenschaft für Webtechnologie.</p></div><p>Ich habe dieses Tool <strong>einfach, schnell und genau</strong> entwickelt.</p><p>🎯 <strong>Mein Ziel:</strong> Hervorragende Währungsumrechnungserfahrung.</p><p>📧 Kontakt: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Zurück</button>',
-            tr: '<h2>👤 Hakkımızda</h2><div class="developer-info"><p>👨‍💻 Ben <strong>Abdulbari</strong>, web teknolojisine tutkulu bağımsız bir geliştiriciyim.</p></div><p>Bu aracı <strong>basit, hızlı ve doğru</strong> olacak şekilde oluşturdum.</p><p>🎯 <strong>Hedefim:</strong> Mükemmel döviz çevirisi deneyimi.</p><p>📧 İletişim: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Ana Sayfa</button>',
-            ru: '<h2>👤 О нас</h2><div class="developer-info"><p>👨‍💻 Я <strong>Абдулбари</strong>, независимый разработчик, увлеченный веб-технологиями.</p></div><p>Я создал этот инструмент <strong>простым, быстрым и точным</strong>.</p><p>🎯 <strong>Моя цель:</strong> Отличный опыт конвертации валют.</p><p>📧 Контакты: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 На главную</button>'
-        },
-        privacy: {
-            ar: '<h2>🔒 سياسة الخصوصية</h2><p><strong>آخر تحديث:</strong> 27 أغسطس 2026</p><p>نحن نلتزم بحماية خصوصيتك.</p><h3>🍪 الكوكيز</h3><p>يستخدم موقعنا <strong>ملفات تعريف الارتباط (Cookies)</strong> لتحسين تجربتك. عبر <strong>Google AdSense</strong>، والذي يستخدم الكوكيز لتقديم إعلانات مخصصة.</p><p>يمكنك التحكم في إعدادات الكوكيز من خلال متصفحك.</p><h3>📊 ما المعلومات التي نجمعها؟</h3><ul><li><strong>المعلومات التلقائية:</strong> مثل عنوان IP ونوع المتصفح.</li><li><strong>بيانات التحويل:</strong> العملات والمبالغ (تُستخدم فقط للعرض).</li></ul><h3>✉️ التواصل</h3><p>للاستفسار: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',
-            en: '<h2>🔒 Privacy Policy</h2><p><strong>Last Updated:</strong> August 27, 2026</p><p>We are committed to protecting your privacy.</p><h3>🍪 Cookies</h3><p>Our site uses <strong>Cookies</strong> to improve your experience. Through <strong>Google AdSense</strong>, which uses cookies to serve personalized ads.</p><p>You can control cookie settings through your browser.</p><h3>📊 What information do we collect?</h3><ul><li><strong>Automatic information:</strong> IP address and browser type.</li><li><strong>Conversion data:</strong> Currencies and amounts (used only for display).</li></ul><h3>✉️ Contact</h3><p>For inquiries: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>',
-            fr: '<h2>🔒 Confidentialité</h2><p><strong>Dernière mise à jour:</strong> 27 août 2026</p><p>Nous protégeons votre vie privée.</p><h3>🍪 Cookies</h3><p>Notre site utilise des <strong>Cookies</strong> via <strong>Google AdSense</strong> pour des annonces personnalisées.</p><p>Vous pouvez contrôler les cookies via votre navigateur.</p><h3>📊 Quelles informations ?</h3><ul><li><strong>Informations automatiques:</strong> Adresse IP et type de navigateur.</li><li><strong>Données de conversion:</strong> Devises et montants (affichage uniquement).</li></ul><h3>✉️ Contact</h3><p>Contact: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Retour</button>',
-            es: '<h2>🔒 Política de privacidad</h2><p><strong>Última actualización:</strong> 27 de agosto de 2026</p><p>Protegemos su privacidad.</p><h3>🍪 Cookies</h3><p>Nuestro sitio usa <strong>Cookies</strong> a través de <strong>Google AdSense</strong> para anuncios personalizados.</p><p>Puede controlar las cookies desde su navegador.</p><h3>📊 ¿Qué información?</h3><ul><li><strong>Información automática:</strong> Dirección IP y tipo de navegador.</li><li><strong>Datos de conversión:</strong> Monedas y montos (solo visualización).</li></ul><h3>✉️ Contacto</h3><p>Contacto: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Volver</button>',
-            de: '<h2>🔒 Datenschutz</h2><p><strong>Letzte Aktualisierung:</strong> 27. August 2026</p><p>Wir schützen Ihre Privatsphäre.</p><h3>🍪 Cookies</h3><p>Unsere Site verwendet <strong>Cookies</strong> über <strong>Google AdSense</strong> für personalisierte Anzeigen.</p><p>Sie können Cookies über Ihren Browser steuern.</p><h3>📊 Welche Informationen?</h3><ul><li><strong>Automatische Informationen:</strong> IP-Adresse und Browsertyp.</li><li><strong>Umrechnungsdaten:</strong> Währungen und Beträge (nur Anzeige).</li></ul><h3>✉️ Kontakt</h3><p>Kontakt: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Zurück</button>',
-            tr: '<h2>🔒 Gizlilik Politikası</h2><p><strong>Son Güncelleme:</strong> 27 Ağustos 2026</p><p>Gizliliğinizi koruyoruz.</p><h3>🍪 Çerezler</h3><p>Sitemiz <strong>Google AdSense</strong> aracılığıyla <strong>Çerezler</strong> kullanır.</p><p>Çerez ayarlarını tarayıcınızdan kontrol edebilirsiniz.</p><h3>📊 Hangi bilgiler?</h3><ul><li><strong>Otomatik bilgiler:</strong> IP adresi ve tarayıcı türü.</li><li><strong>Dönüşüm verileri:</strong> Para birimleri ve tutarlar (sadece görüntüleme).</li></ul><h3>✉️ İletişim</h3><p>İletişim: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Ana Sayfa</button>',
-            ru: '<h2>🔒 Конфиденциальность</h2><p><strong>Последнее обновление:</strong> 27 августа 2026 г.</p><p>Мы защищаем вашу конфиденциальность.</p><h3>🍪 Файлы cookie</h3><p>Наш сайт использует <strong>файлы cookie</strong> через <strong>Google AdSense</strong>.</p><p>Вы можете управлять настройками cookie в браузере.</p><h3>📊 Какая информация?</h3><ul><li><strong>Автоматическая информация:</strong> IP-адрес и тип браузера.</li><li><strong>Данные конвертации:</strong> Валюты и суммы (только отображение).</li></ul><h3>✉️ Контакты</h3><p>Контакты: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 На главную</button>'
-        },
-        terms: {
-            ar: '<h2>📜 شروط الاستخدام</h2><p><strong>آخر تحديث:</strong> 27 أغسطس 2026</p><p>باستخدامك للموقع، توافق على الشروط التالية:</p><h3>✅ الاستخدام المسموح</h3><ul><li>استخدام الموقع لأغراض <strong>شخصية وغير تجارية</strong>.</li></ul><h3>🚫 الاستخدام الممنوع</h3><ul><li>محاولة اختراق أو تعطيل الموقع.</li><li>استخدام البيانات لأغراض غير قانونية.</li></ul><h3>⚠️ إخلاء المسؤولية</h3><ul><li>الأسعار المعروضة هي <strong>أسعار متوسطة</strong> وقد تختلف.</li><li>الموقع يقدم الأداة "كما هي" دون ضمانات.</li></ul><h3>✉️ التواصل</h3><p>للاستفسار: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',
-            en: '<h2>📜 Terms of Service</h2><p><strong>Last Updated:</strong> August 27, 2026</p><p>By using this site, you agree to the following terms:</p><h3>✅ Permitted Use</h3><ul><li>Personal and non-commercial use only.</li></ul><h3>🚫 Prohibited Use</h3><ul><li>Attempting to hack or disrupt the site.</li><li>Using data for illegal purposes.</li></ul><h3>⚠️ Disclaimer</h3><ul><li>Rates are <strong>average rates</strong> and may differ.</li><li>The tool is provided "as is" without warranties.</li></ul><h3>✉️ Contact</h3><p>For inquiries: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>',
-            fr: '<h2>📜 Conditions</h2><p><strong>Dernière mise à jour:</strong> 27 août 2026</p><p>En utilisant ce site, vous acceptez les conditions suivantes:</p><h3>✅ Utilisation autorisée</h3><ul><li>Utilisation personnelle et non commerciale.</li></ul><h3>🚫 Utilisation interdite</h3><ul><li>Tenter de pirater ou perturber le site.</li><li>Utiliser les données à des fins illégales.</li></ul><h3>⚠️ Avertissement</h3><ul><li>Les taux sont <strong>des taux moyens</strong> et peuvent différer.</li><li>L\'outil est fourni "tel quel" sans garantie.</li></ul><h3>✉️ Contact</h3><p>Contact: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Retour</button>',
-            es: '<h2>📜 Términos</h2><p><strong>Última actualización:</strong> 27 de agosto de 2026</p><p>Al usar este sitio, acepta los siguientes términos:</p><h3>✅ Uso permitido</h3><ul><li>Uso personal y no comercial.</li></ul><h3>🚫 Uso prohibido</h3><ul><li>Intentar hackear o interrumpir el sitio.</li><li>Usar datos para fines ilegales.</li></ul><h3>⚠️ Descargo</h3><ul><li>Las tasas son <strong>tasas promedio</strong> y pueden variar.</li><li>La herramienta se proporciona "tal cual" sin garantías.</li></ul><h3>✉️ Contacto</h3><p>Contacto: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Volver</button>',
-            de: '<h2>📜 Bedingungen</h2><p><strong>Letzte Aktualisierung:</strong> 27. August 2026</p><p>Mit der Nutzung dieser Website stimmen Sie den folgenden Bedingungen zu:</p><h3>✅ Zulässige Nutzung</h3><ul><li>Persönliche und nicht-kommerzielle Nutzung.</li></ul><h3>🚫 Verbotene Nutzung</h3><ul><li>Versuch, die Website zu hacken oder zu stören.</li><li>Nutzung von Daten für illegale Zwecke.</li></ul><h3>⚠️ Haftungsausschluss</h3><ul><li>Die Kurse sind <strong>Durchschnittskurse</strong> und können abweichen.</li><li>Das Tool wird "wie besehen" ohne Gewähr bereitgestellt.</li></ul><h3>✉️ Kontakt</h3><p>Kontakt: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Zurück</button>',
-            tr: '<h2>📜 Kullanım Şartları</h2><p><strong>Son Güncelleme:</strong> 27 Ağustos 2026</p><p>Bu siteyi kullanarak aşağıdaki şartları kabul edersiniz:</p><h3>✅ İzin Verilen Kullanım</h3><ul><li>Kişisel ve ticari olmayan kullanım.</li></ul><h3>🚫 Yasaklanan Kullanım</h3><ul><li>Siteyi hacklemeye veya bozmaya çalışmak.</li><li>Verileri yasa dışı amaçlarla kullanmak.</li></ul><h3>⚠️ Sorumluluk Reddi</h3><ul><li>Kurlar <strong>ortalama kurlardır</strong> ve farklılık gösterebilir.</li><li>Araç "olduğu gibi" garantisiz sunulur.</li></ul><h3>✉️ İletişim</h3><p>İletişim: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Ana Sayfa</button>',
-            ru: '<h2>📜 Условия</h2><p><strong>Последнее обновление:</strong> 27 августа 2026 г.</p><p>Используя этот сайт, вы соглашаетесь со следующими условиями:</p><h3>✅ Разрешенное использование</h3><ul><li>Личное и некоммерческое использование.</li></ul><h3>🚫 Запрещенное использование</h3><ul><li>Попытка взлома или нарушения работы сайта.</li><li>Использование данных в незаконных целях.</li></ul><h3>⚠️ Отказ от ответственности</h3><ul><li>Курсы являются <strong>средними курсами</strong> и могут отличаться.</li><li>Инструмент предоставляется "как есть" без гарантий.</li></ul><h3>✉️ Контакты</h3><p>Контакты: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 На главную</button>'
-        },
-        contact: {
-            ar: '<h2>✉️ اتصل بنا</h2><p>نرحب باستفساراتكم واقتراحاتكم.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 الاسم الكامل" required><input type="email" id="contactEmail" placeholder="📧 البريد الإلكتروني" required><input type="text" id="contactSubject" placeholder="📝 الموضوع"><textarea id="contactMessage" placeholder="✏️ اكتب رسالتك هنا..." required></textarea><button type="submit">📩 إرسال</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 البريد: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',
-            en: '<h2>✉️ Contact Us</h2><p>We welcome your inquiries and suggestions.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Full Name" required><input type="email" id="contactEmail" placeholder="📧 Email Address" required><input type="text" id="contactSubject" placeholder="📝 Subject"><textarea id="contactMessage" placeholder="✏️ Write your message here..." required></textarea><button type="submit">📩 Send</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 Email: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>',
-            fr: '<h2>✉️ Contactez-nous</h2><p>Nous accueillons vos demandes et suggestions.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Nom complet" required><input type="email" id="contactEmail" placeholder="📧 E-mail" required><input type="text" id="contactSubject" placeholder="📝 Sujet"><textarea id="contactMessage" placeholder="✏️ Votre message..." required></textarea><button type="submit">📩 Envoyer</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 E-mail: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Retour</button>',
-            es: '<h2>✉️ Contáctenos</h2><p>Recibimos sus consultas y sugerencias.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Nombre completo" required><input type="email" id="contactEmail" placeholder="📧 Correo" required><input type="text" id="contactSubject" placeholder="📝 Asunto"><textarea id="contactMessage" placeholder="✏️ Escriba su mensaje..." required></textarea><button type="submit">📩 Enviar</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 Correo: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Volver</button>',
-            de: '<h2>✉️ Kontakt</h2><p>Wir begrüßen Ihre Anfragen und Anregungen.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Vollständiger Name" required><input type="email" id="contactEmail" placeholder="📧 E-Mail" required><input type="text" id="contactSubject" placeholder="📝 Betreff"><textarea id="contactMessage" placeholder="✏️ Ihre Nachricht..." required></textarea><button type="submit">📩 Senden</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 E-Mail: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Zurück</button>',
-            tr: '<h2>✉️ İletişim</h2><p>Sorularınızı ve önerilerinizi bekliyoruz.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Tam Ad" required><input type="email" id="contactEmail" placeholder="📧 E-posta" required><input type="text" id="contactSubject" placeholder="📝 Konu"><textarea id="contactMessage" placeholder="✏️ Mesajınız..." required></textarea><button type="submit">📩 Gönder</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 E-posta: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Ana Sayfa</button>',
-            ru: '<h2>✉️ Контакты</h2><p>Мы ждем ваши запросы и предложения.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Полное имя" required><input type="email" id="contactEmail" placeholder="📧 Эл. почта" required><input type="text" id="contactSubject" placeholder="📝 Тема"><textarea id="contactMessage" placeholder="✏️ Ваше сообщение..." required></textarea><button type="submit">📩 Отправить</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 Почта: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 На главную</button>'
-        }
-    };
-    return { about: t.about[lang]||t.about.ar, privacy: t.privacy[lang]||t.privacy.ar, terms: t.terms[lang]||t.terms.ar, contact: t.contact[lang]||t.contact.ar };
-}
+// ===== الترجمات الأساسية =====
+const T = {
+ar:{title:'💱 حول',badge:'⚡ فوري',sub:'أداة تحويل العملات لحظياً بأسعار حقيقية من API',adTop:'📢 مساحة إعلان AdSense — بعد الموافقة، ضع الكود هنا',labelAmount:'💰 المبلغ',labelFrom:'🔄 من',labelTo:'🎯 إلى',resultLabel:'💵 النتيجة',historyLabel:'📋 آخر تحويل',adBottom:'📢 مساحة إعلان AdSense — هنا الإعلان الثاني',apiOnline:'مباشر',apiOffline:'غير متصل',updating:'جاري التحديث...',darkLabel:'🌙 ليلي',articlesTitle:'📚 مقالات تعليمية',readMore:'اقرأ المزيد ←',copyright:'جميع الحقوق محفوظة',developer:'تم التطوير بواسطة',install:'تثبيت التطبيق',backBtn:'🔙 العودة للرئيسية'},
+en:{title:'💱 Convert',badge:'⚡ Instant',sub:'Live currency converter with real rates from API',adTop:'📢 AdSense Ad Space — Paste your code here after approval',labelAmount:'💰 Amount',labelFrom:'🔄 From',labelTo:'🎯 To',resultLabel:'💵 Result',historyLabel:'📋 Last Conversion',adBottom:'📢 AdSense Ad Space — Second ad here',apiOnline:'Online',apiOffline:'Offline',updating:'Updating...',darkLabel:'🌙 Dark',articlesTitle:'📚 Educational Articles',readMore:'Read More →',copyright:'All Rights Reserved',developer:'Developed by',install:'Install App',backBtn:'🔙 Back to Home'},
+fr:{title:'💱 Convertir',badge:'⚡ Instantané',sub:'Convertisseur de devises avec taux réels depuis API',adTop:'📢 Espace AdSense — Collez votre code ici',labelAmount:'💰 Montant',labelFrom:'🔄 De',labelTo:'🎯 Vers',resultLabel:'💵 Résultat',historyLabel:'📋 Dernière conversion',adBottom:'📢 Espace AdSense — Deuxième annonce',apiOnline:'En ligne',apiOffline:'Hors ligne',updating:'Mise à jour...',darkLabel:'🌙 Nuit',articlesTitle:'📚 Articles éducatifs',readMore:'Lire la suite →',copyright:'Tous droits réservés',developer:'Développé par',install:"Installer l'app",backBtn:'🔙 Retour'},
+es:{title:'💱 Convertir',badge:'⚡ Instantáneo',sub:'Conversor de divisas con tasas reales desde API',adTop:'📢 Espacio AdSense — Pega tu código aquí',labelAmount:'💰 Cantidad',labelFrom:'🔄 De',labelTo:'🎯 A',resultLabel:'💵 Resultado',historyLabel:'📋 Última conversión',adBottom:'📢 Espacio AdSense — Segundo anuncio',apiOnline:'En línea',apiOffline:'Desconectado',updating:'Actualizando...',darkLabel:'🌙 Oscuro',articlesTitle:'📚 Artículos educativos',readMore:'Leer más →',copyright:'Todos los derechos reservados',developer:'Desarrollado por',install:'Instalar app',backBtn:'🔙 Volver'},
+de:{title:'💱 Umrechnen',badge:'⚡ Sofort',sub:'Währungsrechner mit echten Kursen von API',adTop:'📢 AdSense-Werbefläche — Füge deinen Code hier ein',labelAmount:'💰 Betrag',labelFrom:'🔄 Von',labelTo:'🎯 Nach',resultLabel:'💵 Ergebnis',historyLabel:'📋 Letzte Umrechnung',adBottom:'📢 AdSense-Werbefläche — Zweite Anzeige',apiOnline:'Online',apiOffline:'Offline',updating:'Wird aktualisiert...',darkLabel:'🌙 Dunkel',articlesTitle:'📚 Lehrreiche Artikel',readMore:'Mehr lesen →',copyright:'Alle Rechte vorbehalten',developer:'Entwickelt von',install:'App installieren',backBtn:'🔙 Zurück'},
+tr:{title:'💱 Dönüştür',badge:'⚡ Anlık',sub:'Gerçek kurlarla canlı döviz çevirici',adTop:'📢 AdSense Reklam Alanı — Kodunuzu buraya yapıştırın',labelAmount:'💰 Tutar',labelFrom:'🔄 Kimden',labelTo:'🎯 Kime',resultLabel:'💵 Sonuç',historyLabel:'📋 Son Dönüşüm',adBottom:'📢 AdSense Reklam Alanı — İkinci reklam',apiOnline:'Çevrimiçi',apiOffline:'Çevrimdışı',updating:'Güncelleniyor...',darkLabel:'🌙 Karanlık',articlesTitle:'📚 Eğitici Makaleler',readMore:'Devamını oku →',copyright:'Tüm Hakları Saklıdır',developer:'Geliştiren',install:'Uygulamayı Yükle',backBtn:'🔙 Ana Sayfa'},
+ru:{title:'💱 Конвертер',badge:'⚡ Мгновенно',sub:'Конвертер валют с реальными курсами от API',adTop:'📢 Рекламное место AdSense — Вставьте код',labelAmount:'💰 Сумма',labelFrom:'🔄 Из',labelTo:'🎯 В',resultLabel:'💵 Результат',historyLabel:'📋 Последняя конвертация',adBottom:'📢 Рекламное место AdSense — Вторая реклама',apiOnline:'Онлайн',apiOffline:'Офлайн',updating:'Обновление...',darkLabel:'🌙 Тёмный',articlesTitle:'📚 Образовательные статьи',readMore:'Читать далее →',copyright:'Все права защищены',developer:'Разработано',install:'Установить приложение',backBtn:'🔙 На главную'}
+};
+
+// ===== محتوى الصفحات القانونية =====
+const PAGES = {
+about:{ar:'<h2>👤 من نحن</h2><div class="developer-info"><p>👨‍💻 أنا <strong>عبدالباري</strong>، مطور مستقل شغوف بتقنية الويب وتطوير الأدوات التي تسهل حياة الناس اليومية.</p></div><p>قمت ببناء هذه الأداة لتكون <strong>بسيطة، سريعة، ودقيقة</strong>، وتعتمد على أسعار صرف حقيقية من API موثوقة.</p><p>🎯 <strong>هدفي:</strong> تقديم تجربة تحويل عملات ممتازة للمستخدمين حول العالم، مع الحفاظ على الخصوصية وسهولة الاستخدام.</p><p>💡 <strong>رؤيتي:</strong> جعل أدوات التحويل المالية في متناول الجميع، بأعلى معايير الجودة والدقة.</p><p>📧 للتواصل: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',en:'<h2>👤 About Us</h2><div class="developer-info"><p>👨‍💻 I\'m <strong>Abdulbari</strong>, an independent developer passionate about web technology and building tools that make daily life easier.</p></div><p>I built this tool to be <strong>simple, fast, and accurate</strong>, using real exchange rates from a reliable API.</p><p>🎯 <strong>My goal:</strong> Provide an excellent currency conversion experience for users worldwide.</p><p>💡 <strong>My vision:</strong> Making financial conversion tools accessible to everyone.</p><p>📧 Contact: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>'},
+privacy:{ar:'<h2>🔒 سياسة الخصوصية</h2><p><strong>آخر تحديث:</strong> 27 أغسطس 2026</p><p>نحن في <strong>محول العملات الذكي</strong> نلتزم بحماية خصوصيتك.</p><h3>🍪 ملفات تعريف الارتباط (كوكيز)</h3><p>يستخدم موقعنا <strong>ملفات تعريف الارتباط (Cookies)</strong> لتحسين تجربتك وتحليل الأداء. هذه الملفات تشمل:</p><ul><li><strong>ملفات ضرورية:</strong> لحفظ تفضيلاتك مثل اللغة والوضع الليلي.</li><li><strong>ملفات إعلانية:</strong> عبر <strong>Google AdSense</strong>، والذي يستخدم الكوكيز لتقديم إعلانات مخصصة.</li><li><strong>ملفات تحليلية:</strong> لفهم كيفية استخدام الموقع.</li></ul><p>يمكنك التحكم في إعدادات الكوكيز من خلال متصفحك.</p><h3>📊 ما المعلومات التي نجمعها؟</h3><ul><li><strong>المعلومات التي تقدمها طوعاً:</strong> مثل الاسم والبريد عند التواصل.</li><li><strong>المعلومات التلقائية:</strong> مثل عنوان IP ونوع المتصفح.</li><li><strong>بيانات التحويل:</strong> العملات والمبالغ (تُستخدم فقط لعرض النتيجة).</li></ul><h3>🔒 كيف نحمي معلوماتك؟</h3><ul><li>نستخدم <strong>شهادة SSL (HTTPS)</strong> لتشفير البيانات.</li><li>لا نبيع أو نشارك معلوماتك الشخصية.</li></ul><h3>✉️ التواصل</h3><p>للاستفسار: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',en:'<h2>🔒 Privacy Policy</h2><p><strong>Last Updated:</strong> August 27, 2026</p><p>At <strong>Smart Currency Converter</strong>, we are committed to protecting your privacy.</p><h3>🍪 Cookies</h3><p>Our website uses <strong>Cookies</strong> to improve your experience and analyze performance. These include:</p><ul><li><strong>Essential cookies:</strong> To save your preferences like language and dark mode.</li><li><strong>Advertising cookies:</strong> Through <strong>Google AdSense</strong>, which uses cookies to serve personalized ads.</li><li><strong>Analytical cookies:</strong> To understand how the site is used.</li></ul><p>You can control cookie settings through your browser.</p><h3>📊 What information do we collect?</h3><ul><li><strong>Information you provide voluntarily:</strong> Such as name and email when contacting us.</li><li><strong>Automatic information:</strong> Such as IP address and browser type.</li><li><strong>Conversion data:</strong> Currencies and amounts (used only to display results).</li></ul><h3>🔒 How do we protect your information?</h3><ul><li>We use <strong>SSL (HTTPS)</strong> to encrypt data.</li><li>We do not sell or share your personal information.</li></ul><h3>✉️ Contact</h3><p>For inquiries: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>'},
+terms:{ar:'<h2>📜 شروط الاستخدام</h2><p><strong>آخر تحديث:</strong> 27 أغسطس 2026</p><p>باستخدامك لموقع <strong>محول العملات الذكي</strong>، فإنك توافق على الشروط التالية:</p><h3>✅ الاستخدام المسموح</h3><ul><li>استخدام الموقع لأغراض <strong>شخصية وغير تجارية</strong>.</li><li>الاستخدام القانوني والأخلاقي للأداة.</li></ul><h3>🚫 الاستخدام الممنوع</h3><ul><li>استخدام الموقع بطرق تضر بالآخرين.</li><li>محاولة اختراق أو تعطيل الموقع.</li><li>استخدام البيانات لأغراض غير قانونية.</li></ul><h3>⚠️ إخلاء المسؤولية</h3><ul><li>الأسعار المعروضة هي <strong>أسعار متوسطة</strong> وقد تختلف عن الأسعار الفعلية.</li><li>الموقع يقدم الأداة "كما هي" دون أي ضمانات.</li><li>نحن لسنا مسؤولين عن أي خسائر ناتجة عن استخدام الموقع.</li></ul><h3>✉️ التواصل</h3><p>للاستفسار: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',en:'<h2>📜 Terms of Service</h2><p><strong>Last Updated:</strong> August 27, 2026</p><p>By using <strong>Smart Currency Converter</strong>, you agree to the following terms:</p><h3>✅ Permitted Use</h3><ul><li>Using the site for <strong>personal and non-commercial</strong> purposes.</li><li>Legal and ethical use of the tool.</li></ul><h3>🚫 Prohibited Use</h3><ul><li>Using the site in ways that harm others.</li><li>Attempting to hack or disrupt the site.</li><li>Using data for illegal purposes.</li></ul><h3>⚠️ Disclaimer</h3><ul><li>Displayed rates are <strong>average rates</strong> and may differ from actual rates.</li><li>The site provides the tool "as is" without any warranties.</li><li>We are not responsible for any losses resulting from site use.</li></ul><h3>✉️ Contact</h3><p>For inquiries: <strong>abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>'},
+contact:{ar:'<h2>✉️ اتصل بنا</h2><p>نرحب باستفساراتكم واقتراحاتكم.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 الاسم الكامل" required><input type="email" id="contactEmail" placeholder="📧 البريد الإلكتروني" required><input type="text" id="contactSubject" placeholder="📝 الموضوع"><textarea id="contactMessage" placeholder="✏️ اكتب رسالتك هنا..." required></textarea><button type="submit">📩 إرسال الرسالة</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 البريد: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 العودة للرئيسية</button>',en:'<h2>✉️ Contact Us</h2><p>We welcome your inquiries and suggestions.</p><form class="contact-form" id="contactForm"><input type="text" id="contactName" placeholder="👤 Full Name" required><input type="email" id="contactEmail" placeholder="📧 Email Address" required><input type="text" id="contactSubject" placeholder="📝 Subject"><textarea id="contactMessage" placeholder="✏️ Write your message here..." required></textarea><button type="submit">📩 Send Message</button></form><p style="font-size:13px;text-align:center;margin-top:12px;">📧 Email: <strong style="color:var(--btn-primary);">abadyabady708@gmail.com</strong></p><button class="back-btn" onclick="showMainContent()">🔙 Back to Home</button>'}
+};
+
+// ===== عناصر الصفحة =====
+const els={title:document.getElementById('siteTitle'),badge:document.getElementById('badgeText'),sub:document.getElementById('subText'),adTop:document.getElementById('adTopText'),labelAmount:document.getElementById('labelAmount'),labelFrom:document.getElementById('labelFrom'),labelTo:document.getElementById('labelTo'),resultLabel:document.getElementById('resultLabel'),historyLabel:document.getElementById('historyLabel'),adBottom:document.getElementById('adBottomText'),footer:document.getElementById('footerText'),apiStatus:document.getElementById('apiStatusText'),apiDot:document.getElementById('apiDot'),updatedAt:document.getElementById('updatedAt'),darkLabel:document.getElementById('darkLabel')};
+const fromSelect=document.getElementById('from'),toSelect=document.getElementById('to'),amountInput=document.getElementById('amount'),resultSpan=document.getElementById('result'),historySpan=document.getElementById('historyText'),swapBtn=document.getElementById('swapBtn'),darkToggle=document.getElementById('darkToggle');
+const languageSelector=document.getElementById('languageSelector'),selectedLang=document.getElementById('selectedLang'),selectedFlag=document.getElementById('selectedFlag'),selectedLangName=document.getElementById('selectedLangName'),langDropdown=document.getElementById('langDropdown'),langArrow=document.getElementById('langArrow'),langOptions=document.querySelectorAll('.lang-option');
+const aboutPage=document.getElementById('aboutPage'),privacyPage=document.getElementById('privacyPage'),termsPage=document.getElementById('termsPage'),contactPage=document.getElementById('contactPage'),articlesSection=document.getElementById('articlesSection'),articlesList=document.getElementById('articlesList'),articlesTitle=document.getElementById('articlesTitle'),articleView=document.getElementById('articleView');
 
 // ===== دوال أساسية =====
-function showMainContent() {
-    document.querySelectorAll('.page-content').forEach(el=>el.classList.remove('active'));
-    document.getElementById('mainContent').style.display='block';
-    document.querySelector('.ad-top').style.display='block';
-    document.querySelector('.ad-bottom').style.display='block';
-    document.querySelector('.sub').style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
-}
-function showPage(pageId) {
-    document.querySelectorAll('.page-content').forEach(el=>el.classList.remove('active'));
-    document.getElementById('mainContent').style.display='none';
-    document.querySelector('.ad-top').style.display='none';
-    document.querySelector('.ad-bottom').style.display='none';
-    document.querySelector('.sub').style.display='none';
-    const pageMap={aboutPage,privacyPage,termsPage,contactPage};
-    if(pageMap[pageId]) pageMap[pageId].classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
-}
+function showMainContent(){document.querySelectorAll('.page-content').forEach(el=>el.classList.remove('active'));document.getElementById('mainContent').style.display='block';articlesSection.style.display='block';document.querySelector('.ad-top').style.display='block';document.querySelector('.ad-bottom').style.display='block';document.querySelector('.sub').style.display='block';window.scrollTo({top:0,behavior:'smooth'})}
+function showPage(pageId){document.querySelectorAll('.page-content').forEach(el=>el.classList.remove('active'));document.getElementById('mainContent').style.display='none';articlesSection.style.display='none';document.querySelector('.ad-top').style.display='none';document.querySelector('.ad-bottom').style.display='none';document.querySelector('.sub').style.display='none';const map={aboutPage,privacyPage,termsPage,contactPage,articleView};if(map[pageId])map[pageId].classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 
-function renderPageContent(lang) {
-    const content = getPageContent(lang);
-    aboutPage.innerHTML = content.about;
-    privacyPage.innerHTML = content.privacy;
-    termsPage.innerHTML = content.terms;
-    contactPage.innerHTML = content.contact;
-    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('contactName')?.value||'';
-        const email = document.getElementById('contactEmail')?.value||'';
-        const subject = document.getElementById('contactSubject')?.value||'استفسار';
-        const msg = document.getElementById('contactMessage')?.value||'';
-        window.location.href = `mailto:abadyabady708@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`الاسم: ${name}\nالبريد: ${email}\n\nالرسالة:\n${msg}`)}`;
-        alert(currentLang==='ar'?'📩 تم فتح بريدك الإلكتروني.':'📩 Your email app has been opened.');
-        this.reset();
-    });
-}
+function showArticle(id){const a=ARTICLES.find(x=>x.id===id);if(!a)return;articleView.innerHTML=a.body[currentLang]||a.body.ar+'<button class="back-btn" onclick="showMainContent()">'+T[currentLang].backBtn+'</button>';showPage('articleView')}
 
-function populateCurrencySelects() {
-    const lang=currentLang;
-    const sorted = [...ALL_CURRENCIES.filter(c=>FAVORITE_CODES.includes(c.code)), ...ALL_CURRENCIES.filter(c=>!FAVORITE_CODES.includes(c.code))];
-    const opts = sorted.map(c=>`<option value="${c.code}">${c.flag} ${c.code} - ${c.name[lang]||c.name.en}</option>`).join('');
-    fromSelect.innerHTML=opts; toSelect.innerHTML=opts;
-    fromSelect.value=localStorage.getItem('lastFrom')||'SAR';
-    toSelect.value=localStorage.getItem('lastTo')||'EGP';
-}
+function renderArticles(){const lang=currentLang;articlesTitle.textContent=T[lang].articlesTitle;articlesList.innerHTML=ARTICLES.map(a=>`<div class="article-card" onclick="showArticle(${a.id})"><h3>${a.title[lang]||a.title.ar}</h3><p>${a.excerpt[lang]||a.excerpt.ar}</p><div class="read-more">${T[lang].readMore}</div></div>`).join('')}
 
-function updateLanguageUI(lang) {
-    const info={ar:{flag:'🇸🇦',name:'العربية'},en:{flag:'🇬🇧',name:'English'},fr:{flag:'🇫🇷',name:'Français'},es:{flag:'🇪🇸',name:'Español'},de:{flag:'🇩🇪',name:'Deutsch'},tr:{flag:'🇹🇷',name:'Türkçe'},ru:{flag:'🇷🇺',name:'Русский'}}[lang];
-    if(info){selectedFlag.textContent=info.flag; selectedLangName.textContent=info.name;}
-    langOptions.forEach(o=>o.classList.toggle('active',o.dataset.lang===lang));
-}
+function renderPageContent(lang){aboutPage.innerHTML=PAGES.about[lang]||PAGES.about.ar;privacyPage.innerHTML=PAGES.privacy[lang]||PAGES.privacy.ar;termsPage.innerHTML=PAGES.terms[lang]||PAGES.terms.ar;contactPage.innerHTML=PAGES.contact[lang]||PAGES.contact.ar;document.getElementById('contactForm')?.addEventListener('submit',function(e){e.preventDefault();const name=document.getElementById('contactName')?.value||'';const email=document.getElementById('contactEmail')?.value||'';const subject=document.getElementById('contactSubject')?.value||'استفسار';const msg=document.getElementById('contactMessage')?.value||'';window.location.href=`mailto:abadyabady708@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`الاسم: ${name}\nالبريد: ${email}\n\nالرسالة:\n${msg}`)}`;alert('📩 تم فتح بريدك الإلكتروني.');this.reset()})}
 
-function toggleLangDropdown(){ langDropdown.classList.toggle('open'); langArrow.classList.toggle('open',langDropdown.classList.contains('open')); }
+function populateCurrencySelects(){const lang=currentLang;const sorted=[...ALL_CURRENCIES.filter(c=>FAVORITE_CODES.includes(c.code)),...ALL_CURRENCIES.filter(c=>!FAVORITE_CODES.includes(c.code))];const opts=sorted.map(c=>`<option value="${c.code}">${c.flag} ${c.code} - ${c.name[lang]||c.name.en}</option>`).join('');fromSelect.innerHTML=opts;toSelect.innerHTML=opts;fromSelect.value=localStorage.getItem('lastFrom')||'SAR';toSelect.value=localStorage.getItem('lastTo')||'EGP'}
 
-async function fetchExchangeRates() {
-    try {
-        els.apiStatus.textContent='جاري التحديث...'; els.apiDot.className='dot offline';
-        const res=await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-        if(!res.ok) throw new Error('API error');
-        const data=await res.json();
-        if(data&&data.rates){ Object.keys(data.rates).forEach(c=>{ if(currentRates[c]!==undefined) currentRates[c]=data.rates[c]; }); lastUpdate=new Date(); isApiOnline=true; els.apiStatus.textContent='مباشر'; els.apiDot.className='dot online'; localStorage.setItem('cachedRates',JSON.stringify(currentRates)); localStorage.setItem('lastUpdate',lastUpdate.toISOString()); updateUpdatedAt(); convert(); return true; }
-    } catch(e){ console.warn('API error:',e); isApiOnline=false; els.apiStatus.textContent='غير متصل'; els.apiDot.className='dot offline'; const cached=localStorage.getItem('cachedRates'); if(cached) try{currentRates={...FALLBACK_RATES,...JSON.parse(cached)};}catch{} updateUpdatedAt(); convert(); return false; }
-}
+function updateLanguageUI(lang){const info={ar:{flag:'🇸🇦',name:'العربية'},en:{flag:'🇬🇧',name:'English'},fr:{flag:'🇫🇷',name:'Français'},es:{flag:'🇪🇸',name:'Español'},de:{flag:'🇩🇪',name:'Deutsch'},tr:{flag:'🇹🇷',name:'Türkçe'},ru:{flag:'🇷🇺',name:'Русский'}}[lang];if(info){selectedFlag.textContent=info.flag;selectedLangName.textContent=info.name}langOptions.forEach(o=>o.classList.toggle('active',o.dataset.lang===lang))}
 
-function updateUpdatedAt(){ const timeStr=lastUpdate?lastUpdate.toLocaleTimeString():'--:--'; els.updatedAt.textContent=`🔄 تحديث • ${timeStr}`; }
+function toggleLangDropdown(){langDropdown.classList.toggle('open');langArrow.classList.toggle('open',langDropdown.classList.contains('open'))}
 
-function setLanguage(lang) {
-    if(!['ar','en','fr','es','de','tr','ru'].includes(lang)) return;
-    currentLang=lang; localStorage.setItem('preferredLang',lang);
-    const t={ar:{title:'💱 حول',badge:'⚡ فوري',sub:'أداة تحويل العملات لحظياً',adTop:'📢 مساحة إعلان AdSense',labelAmount:'💰 المبلغ',labelFrom:'🔄 من',labelTo:'🎯 إلى',resultLabel:'💵 النتيجة',historyLabel:'📋 آخر تحويل',adBottom:'📢 مساحة إعلان AdSense — الثاني',footer:'🔄 أسعار محدثة',apiOnline:'مباشر',apiOffline:'غير متصل',darkLabel:'🌙 ليلي',copyright:'جميع الحقوق محفوظة',developer:'تم التطوير بواسطة',install:'تثبيت التطبيق'},
-    en:{title:'💱 Convert',badge:'⚡ Instant',sub:'Live currency converter',adTop:'📢 AdSense Ad Space',labelAmount:'💰 Amount',labelFrom:'🔄 From',labelTo:'🎯 To',resultLabel:'💵 Result',historyLabel:'📋 Last Conversion',adBottom:'📢 AdSense Ad Space — Second',footer:'🔄 Rates updated',apiOnline:'Online',apiOffline:'Offline',darkLabel:'🌙 Dark',copyright:'All Rights Reserved',developer:'Developed by',install:'Install App'},
-    fr:{title:'💱 Convertir',badge:'⚡ Instantané',sub:'Convertisseur de devises',adTop:'📢 Espace AdSense',labelAmount:'💰 Montant',labelFrom:'🔄 De',labelTo:'🎯 Vers',resultLabel:'💵 Résultat',historyLabel:'📋 Dernière conversion',adBottom:'📢 Espace AdSense — Second',footer:'🔄 Taux mis à jour',apiOnline:'En ligne',apiOffline:'Hors ligne',darkLabel:'🌙 Nuit',copyright:'Tous droits réservés',developer:'Développé par',install:"Installer l'app"},
-    es:{title:'💱 Convertir',badge:'⚡ Instantáneo',sub:'Conversor de divisas',adTop:'📢 Espacio AdSense',labelAmount:'💰 Cantidad',labelFrom:'🔄 De',labelTo:'🎯 A',resultLabel:'💵 Resultado',historyLabel:'📋 Última conversión',adBottom:'📢 Espacio AdSense — Segundo',footer:'🔄 Tasas actualizadas',apiOnline:'En línea',apiOffline:'Desconectado',darkLabel:'🌙 Oscuro',copyright:'Todos los derechos reservados',developer:'Desarrollado por',install:'Instalar app'},
-    de:{title:'💱 Umrechnen',badge:'⚡ Sofort',sub:'Währungsrechner',adTop:'📢 AdSense-Werbefläche',labelAmount:'💰 Betrag',labelFrom:'🔄 Von',labelTo:'🎯 Nach',resultLabel:'💵 Ergebnis',historyLabel:'📋 Letzte Umrechnung',adBottom:'📢 AdSense-Werbefläche — Zweite',footer:'🔄 Kurse aktualisiert',apiOnline:'Online',apiOffline:'Offline',darkLabel:'🌙 Dunkel',copyright:'Alle Rechte vorbehalten',developer:'Entwickelt von',install:'App installieren'},
-    tr:{title:'💱 Dönüştür',badge:'⚡ Anlık',sub:'Döviz çevirici',adTop:'📢 AdSense Reklam Alanı',labelAmount:'💰 Tutar',labelFrom:'🔄 Kimden',labelTo:'🎯 Kime',resultLabel:'💵 Sonuç',historyLabel:'📋 Son Dönüşüm',adBottom:'📢 AdSense Reklam Alanı — İkinci',footer:'🔄 Güncel kurlar',apiOnline:'Çevrimiçi',apiOffline:'Çevrimdışı',darkLabel:'🌙 Karanlık',copyright:'Tüm Hakları Saklıdır',developer:'Geliştiren',install:'Uygulamayı Yükle'},
-    ru:{title:'💱 Конвертер',badge:'⚡ Мгновенно',sub:'Конвертер валют',adTop:'📢 Рекламное место AdSense',labelAmount:'💰 Сумма',labelFrom:'🔄 Из',labelTo:'🎯 В',resultLabel:'💵 Результат',historyLabel:'📋 Последняя конвертация',adBottom:'📢 Рекламное место AdSense — Вторая',footer:'🔄 Курсы обновлены',apiOnline:'Онлайн',apiOffline:'Офлайн',darkLabel:'🌙 Тёмный',copyright:'Все права защищены',developer:'Разработано',install:'Установить приложение'}}[lang];
-    els.title.textContent=t.title; els.badge.textContent=t.badge; els.sub.textContent=t.sub; els.adTop.innerHTML=t.adTop; els.labelAmount.textContent=t.labelAmount; els.labelFrom.textContent=t.labelFrom; els.labelTo.textContent=t.labelTo; els.resultLabel.textContent=t.resultLabel; els.historyLabel.textContent=t.historyLabel; els.adBottom.innerHTML=t.adBottom; els.footer.innerHTML=`<div class="footer-links"><a onclick="showPage('aboutPage')">👤 ${'من نحن'}</a><a onclick="showPage('privacyPage')">🔒 ${'سياسة الخصوصية'}</a><a onclick="showPage('termsPage')">📜 ${'شروط الاستخدام'}</a><a onclick="showPage('contactPage')">✉️ ${'اتصل بنا'}</a></div><button class="install-btn" id="installBtn">📲 ${t.install}</button><div class="copyright">© 2026 محول العملات الذكي | ${t.copyright}</div><div class="developer-credit">👨‍💻 ${t.developer} <strong>عبدالباري</strong></div>`; els.darkLabel.textContent=t.darkLabel; document.getElementById('installBtn')?.addEventListener('click',installApp); els.apiStatus.textContent=isApiOnline?t.apiOnline:t.apiOffline; els.apiDot.className=isApiOnline?'dot online':'dot offline'; document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr'; updateLanguageUI(lang); renderPageContent(lang); populateCurrencySelects(); updateUpdatedAt(); convert(); langDropdown.classList.remove('open'); langArrow.classList.remove('open');
-}
+async function fetchExchangeRates(){try{els.apiStatus.textContent=T[currentLang].updating;els.apiDot.className='dot offline';const res=await fetch('https://api.exchangerate-api.com/v4/latest/USD');if(!res.ok)throw new Error('API');const data=await res.json();if(data&&data.rates){Object.keys(data.rates).forEach(c=>{if(currentRates[c]!==undefined)currentRates[c]=data.rates[c]});lastUpdate=new Date();isApiOnline=true;els.apiStatus.textContent=T[currentLang].apiOnline;els.apiDot.className='dot online';localStorage.setItem('cachedRates',JSON.stringify(currentRates));localStorage.setItem('lastUpdate',lastUpdate.toISOString());updateUpdatedAt();convert()}}catch(e){console.warn('API error:',e);isApiOnline=false;els.apiStatus.textContent=T[currentLang].apiOffline;els.apiDot.className='dot offline';const cached=localStorage.getItem('cachedRates');if(cached)try{currentRates={...FALLBACK_RATES,...JSON.parse(cached)}}catch{}updateUpdatedAt();convert()}}
 
-function toggleDarkMode(){ isDark=!isDark; document.body.classList.toggle('dark-mode',isDark); darkToggle.classList.toggle('active',isDark); localStorage.setItem('darkMode',isDark); }
+function updateUpdatedAt(){const timeStr=lastUpdate?lastUpdate.toLocaleTimeString():'--:--';els.updatedAt.textContent=`🔄 ${timeStr}`}
 
-function convert(){ const amount=parseFloat(amountInput.value)||0; const from=fromSelect.value,to=toSelect.value; localStorage.setItem('lastFrom',from); localStorage.setItem('lastTo',to); const result=(amount/currentRates[from])*currentRates[to]; resultSpan.innerHTML=result.toFixed(2)+' <small>'+to+'</small>'; historySpan.textContent=amount+' '+from+' → '+result.toFixed(2)+' '+to; localStorage.setItem('lastConversion',historySpan.textContent); }
+function setLanguage(lang){if(!T[lang])return;currentLang=lang;localStorage.setItem('preferredLang',lang);const t=T[lang];els.title.textContent=t.title;els.badge.textContent=t.badge;els.sub.textContent=t.sub;els.adTop.innerHTML=t.adTop;els.labelAmount.textContent=t.labelAmount;els.labelFrom.textContent=t.labelFrom;els.labelTo.textContent=t.labelTo;els.resultLabel.textContent=t.resultLabel;els.historyLabel.textContent=t.historyLabel;els.adBottom.innerHTML=t.adBottom;els.darkLabel.textContent=t.darkLabel;els.footer.innerHTML=`<div class="footer-links"><a onclick="showPage('aboutPage')">👤 ${lang==='ar'?'من نحن':lang==='en'?'About':lang==='fr'?'À propos':lang==='es'?'Acerca':'Über uns'}</a><a onclick="showPage('privacyPage')">🔒 ${lang==='ar'?'سياسة الخصوصية':lang==='en'?'Privacy':lang==='fr'?'Confidentialité':'Privatsphäre'}</a><a onclick="showPage('termsPage')">📜 ${lang==='ar'?'شروط الاستخدام':lang==='en'?'Terms':'Conditions'}</a><a onclick="showPage('contactPage')">✉️ ${lang==='ar'?'اتصل بنا':lang==='en'?'Contact':'Contact'}</a></div><button class="install-btn" id="installBtn">📲 ${t.install}</button><div class="copyright">© 2026 ${t.title.replace('💱 ','')} | ${t.copyright}</div><div class="developer-credit">👨‍💻 ${t.developer} <strong>عبدالباري</strong></div>`;document.getElementById('installBtn')?.addEventListener('click',installApp);els.apiStatus.textContent=isApiOnline?t.apiOnline:t.apiOffline;els.apiDot.className=isApiOnline?'dot online':'dot offline';document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';updateLanguageUI(lang);renderPageContent(lang);renderArticles();populateCurrencySelects();updateUpdatedAt();convert();langDropdown.classList.remove('open');langArrow.classList.remove('open')}
 
-function swapCurrencies(){ const f=fromSelect.value,t=toSelect.value; fromSelect.value=t; toSelect.value=f; convert(); }
+function toggleDarkMode(){isDark=!isDark;document.body.classList.toggle('dark-mode',isDark);darkToggle.classList.toggle('active',isDark);localStorage.setItem('darkMode',isDark)}
 
-function loadHistory(){ const saved=localStorage.getItem('lastConversion'); if(saved) historySpan.textContent=saved; }
+function convert(){const amount=parseFloat(amountInput.value)||0;const from=fromSelect.value,to=toSelect.value;localStorage.setItem('lastFrom',from);localStorage.setItem('lastTo',to);const result=(amount/currentRates[from])*currentRates[to];resultSpan.innerHTML=result.toFixed(2)+' <small>'+to+'</small>';historySpan.textContent=amount+' '+from+' → '+result.toFixed(2)+' '+to;localStorage.setItem('lastConversion',historySpan.textContent)}
+
+function swapCurrencies(){const f=fromSelect.value,t=toSelect.value;fromSelect.value=t;toSelect.value=f;convert()}
+
+function loadHistory(){const saved=localStorage.getItem('lastConversion');if(saved)historySpan.textContent=saved}
 
 let deferredPrompt=null;
-function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null;}); } else { alert(currentLang==='ar'?'📲 استخدم Chrome أو Edge وابحث عن زر "تثبيت"':'📲 Use Chrome or Edge, look for "Install"'); } }
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null})}else{alert(currentLang==='ar'?'📲 استخدم Chrome أو Edge وابحث عن زر "تثبيت"':'📲 Use Chrome or Edge, look for "Install"')}}
 
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredPrompt=e; document.getElementById('installBtn').style.display='block';});
-window.addEventListener('appinstalled',()=>{deferredPrompt=null;});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block'});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null});
 
-fromSelect.addEventListener('change',convert); toSelect.addEventListener('change',convert); amountInput.addEventListener('input',convert); swapBtn.addEventListener('click',swapCurrencies); darkToggle.addEventListener('click',toggleDarkMode); selectedLang.addEventListener('click',toggleLangDropdown); langOptions.forEach(o=>o.addEventListener('click',()=>setLanguage(o.dataset.lang))); document.addEventListener('click',e=>{ if(!languageSelector.contains(e.target)){ langDropdown.classList.remove('open'); langArrow.classList.remove('open'); } });
+fromSelect.addEventListener('change',convert);toSelect.addEventListener('change',convert);amountInput.addEventListener('input',convert);swapBtn.addEventListener('click',swapCurrencies);darkToggle.addEventListener('click',toggleDarkMode);selectedLang.addEventListener('click',toggleLangDropdown);langOptions.forEach(o=>o.addEventListener('click',()=>setLanguage(o.dataset.lang)));document.addEventListener('click',e=>{if(!languageSelector.contains(e.target)){langDropdown.classList.remove('open');langArrow.classList.remove('open')}});
 
-const cached=localStorage.getItem('cachedRates'); if(cached) try{currentRates={...FALLBACK_RATES,...JSON.parse(cached)};}catch{}
-if(isDark){document.body.classList.add('dark-mode'); darkToggle.classList.add('active');}
-populateCurrencySelects(); loadHistory(); renderPageContent(currentLang); updateLanguageUI(currentLang); setLanguage(currentLang); fetchExchangeRates(); setInterval(fetchExchangeRates,3600000);
+const cached=localStorage.getItem('cachedRates');if(cached)try{currentRates={...FALLBACK_RATES,...JSON.parse(cached)}}catch{}
+if(isDark){document.body.classList.add('dark-mode');darkToggle.classList.add('active')}
+populateCurrencySelects();loadHistory();renderPageContent(currentLang);renderArticles();updateLanguageUI(currentLang);setLanguage(currentLang);fetchExchangeRates();setInterval(fetchExchangeRates,3600000);
 </script>
 </body>
 </html>
